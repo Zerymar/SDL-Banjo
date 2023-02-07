@@ -3,9 +3,7 @@
 
 #include "../Components/InputComponent.h"
 #include "../Shapes/TriangleShape.h"
-#include "../Utility/vector2.h"
-
-struct Vector2;
+#include "../Utility/Math/Vector2.h"
 
 class MainPlayer
 {

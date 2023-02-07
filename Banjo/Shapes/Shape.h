@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "../Utility/Vector2.h"
+#include "../Utility/Math/Vector2.h"
 #include "SDL.h"
 
 class Shape

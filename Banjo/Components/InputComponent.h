@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <SDL_events.h>
-#include"../Utility/Vector2.h"
+#include"../Utility/Math/Vector2.h"
 
 class InputComponent
 {

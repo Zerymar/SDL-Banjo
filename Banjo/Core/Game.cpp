@@ -1,7 +1,7 @@
 ﻿#include "Game.h"
 #include <iostream>
 #include "../Utility/defs.h"
-#include "../Utility/vector2.h"
+#include "../Utility/Math/Vector2.h"
 Game::Game()
 {
     m_pWindow = nullptr;

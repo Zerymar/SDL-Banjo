@@ -131,6 +131,8 @@
     </ItemDefinitionGroup>
     <ItemGroup>
         <ClCompile Include="Components\InputComponent.cpp" />
+        <ClCompile Include="Core\ComponentArray.cpp" />
+        <ClCompile Include="Core\EntityManager.cpp" />
         <ClCompile Include="Core\Game.cpp">
           <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
           <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -282,14 +284,25 @@
         <ClCompile Include="main.cpp" />
         <ClCompile Include="Shapes\Shape.cpp" />
         <ClCompile Include="Shapes\TriangleShape.cpp" />
+        <ClCompile Include="Utility\Math\Vector2.cpp" />
+        <ClCompile Include="Utility\Math\Vector3.cpp" />
     </ItemGroup>
     <ItemGroup>
         <ClInclude Include="Components\InputComponent.h" />
+        <ClInclude Include="Components\Transform.hpp" />
+        <ClInclude Include="Core\ComponentArray.h" />
+        <ClInclude Include="Core\ComponentManager.hpp" />
+        <ClInclude Include="Core\Coordinator.hpp" />
+        <ClInclude Include="Core\EntityManager.h" />
         <ClInclude Include="Core\Game.h" />
         <ClInclude Include="Core\MainPlayer.h" />
+        <ClInclude Include="Core\System.hpp" />
+        <ClInclude Include="Core\SystemManager.hpp" />
         <ClInclude Include="Shapes\Shape.h" />
         <ClInclude Include="Shapes\TriangleShape.h" />
         <ClInclude Include="Utility\defs.h" />
+        <ClInclude Include="Utility\Math\Vector2.h" />
+        <ClInclude Include="Utility\Math\Vector3.h" />
         <ClInclude Include="Utility\types.h" />
         <ClInclude Include="Utility\vector2.h" />
     </ItemGroup>
