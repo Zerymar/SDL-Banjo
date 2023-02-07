@@ -6,6 +6,7 @@ MainPlayer::MainPlayer(SDL_Renderer* renderer, int triangle_sideLength, Vector2 
     m_PlayerPosition = position;
     m_Triangle.m_Position = &m_PlayerPosition;
     inputComp.m_ParentPosition = &m_PlayerPosition;
+    inputComp.m_ScalarVelocity = 5;
     
 }
 

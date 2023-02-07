@@ -4,6 +4,7 @@
 InputComponent::InputComponent()
 {
     m_ParentPosition = nullptr;
+    m_ScalarVelocity = 1;
     m_Velocity.x = 0;
     m_Velocity.y = 0;
 }
@@ -20,16 +21,16 @@ void InputComponent::HandleInput(const SDL_Event& event)
         switch(event.key.keysym.sym)
         {
             case SDLK_a:
-                m_Velocity.x = -1;
+                m_Velocity.x = -m_ScalarVelocity;
                 break;
             case SDLK_d:
-                m_Velocity.x = 1;
+                m_Velocity.x = m_ScalarVelocity;
                 break;
             case SDLK_w:
-                m_Velocity.y = -1;
+                m_Velocity.y = -m_ScalarVelocity;
                 break;
             case SDLK_s:
-                m_Velocity.y = 1;
+                m_Velocity.y = m_ScalarVelocity;
                 break;  
         }
         break;
