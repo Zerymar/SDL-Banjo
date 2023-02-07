@@ -73,3 +73,8 @@ Vector2 Vector2::operator*(float const& scalar ) const
     x * scalar,
     y * scalar);
 }
+
+float Vector2::dot_product(Vector2 const& vectorA, Vector2 const& vectorB)
+{
+    return (vectorA.x * vectorB.x) + (vectorA.y * vectorB.y);
+}

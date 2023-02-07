@@ -304,10 +304,6 @@
         <ClInclude Include="Utility\Math\Vector2.h" />
         <ClInclude Include="Utility\Math\Vector3.h" />
         <ClInclude Include="Utility\types.h" />
-        <ClInclude Include="Utility\vector2.h" />
-    </ItemGroup>
-    <ItemGroup>
-      <Content Include="Readme.md" />
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
     <ImportGroup Label="ExtensionTargets">

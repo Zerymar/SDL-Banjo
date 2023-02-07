@@ -76,3 +76,16 @@ Vector3 Vector3::operator*=(float scalar)
     
     return *this;
 }
+
+float Vector3::dot_product(Vector3 const& vectorA, Vector3 const& vectorB)
+{
+    return (vectorA.x * vectorB.x) + (vectorA.y * vectorB.y) + (vectorA.z * vectorB.z); 
+}
+
+Vector3 Vector3::cross_product(Vector3 const& vectorA, Vector3 const& vectorB)
+{
+    float x = vectorA.y*vectorB.z - vectorA.z*vectorB.y;
+    float y = vectorA.z*vectorB.x - vectorA.x*vectorB.z;
+    float z = vectorA.x*vectorB.y - vectorA.y*vectorB.x;
+    return Vector3(x,y,z);
+}

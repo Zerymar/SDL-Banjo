@@ -17,7 +17,10 @@ public:
     Vector3 operator *=(Vector3 const& vector);
 
     Vector3 operator*(float scalar) const;
-    Vector3 operator*=(float scalar) ;
+    Vector3 operator*=(float scalar);
+
+    static float dot_product(Vector3 const& vectorA, Vector3 const& vectorB);
+    static Vector3 cross_product(Vector3 const& vectorA, Vector3 const& vectorB);
 
     float x, y, z;
 };
