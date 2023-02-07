@@ -1,13 +1,11 @@
 ﻿#include "Game.h"
 #include <iostream>
-#include "defs.h"
-
+#include "../Utility/defs.h"
+#include "../Utility/vector2.h"
 Game::Game()
 {
     m_pWindow = nullptr;
     m_PRenderer = nullptr;
-
-    
 }
 
 Game::~Game()

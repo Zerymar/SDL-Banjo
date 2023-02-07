@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include <SDL.h>
 #include "MainPlayer.h"
+
+
 class Game
 {
 public:

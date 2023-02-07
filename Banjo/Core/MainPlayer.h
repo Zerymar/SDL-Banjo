@@ -1,9 +1,11 @@
 ﻿#pragma once
 #include <SDL_render.h>
 
-#include "Components/InputComponent.h"
-#include "Shapes/TriangleShape.h"
-#include "Utility/Vector2.h"
+#include "../Components/InputComponent.h"
+#include "../Shapes/TriangleShape.h"
+#include "../Utility/vector2.h"
+
+struct Vector2;
 
 class MainPlayer
 {
