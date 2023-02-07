@@ -1,6 +1,6 @@
 ﻿#pragma once
-#include "System.hpp"
-#include "../Utility/types.h"
+#include "Systems/System.hpp"
+#include "../Utility/types.hpp"
 #include <cassert>
 #include <memory>
 #include <unordered_map>

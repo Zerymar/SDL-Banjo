@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "ComponentArray.h"
-#include "../Utility/types.h"
+#include "../Utility/types.hpp"
 #include <any>
 #include <cassert>
 #include <memory>

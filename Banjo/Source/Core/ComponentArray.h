@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "../Utility/types.h"
+#include "../Utility/types.hpp"
 #include <array>
 #include <unordered_map>
 

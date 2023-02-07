@@ -1,9 +1,15 @@
 g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\vc143.pdb
 g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\vc143.idb
-g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\init.obj
-g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\draw.obj
 g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\main.obj
 g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\game.obj
+g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\triangleshape.obj
+g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\mainplayer.obj
+g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\shape.obj
+g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\inputcomponent.obj
+g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\vector2.obj
+g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\entitymanager.obj
+g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\componentarray.obj
+g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\vector3.obj
 g:\github\zerymar\banjo\sdl-banjo\x64\debug\banjo.exe
 g:\github\zerymar\banjo\sdl-banjo\banjo\x64\debug\banjo.ilk
 g:\github\zerymar\banjo\sdl-banjo\x64\debug\banjo.pdb

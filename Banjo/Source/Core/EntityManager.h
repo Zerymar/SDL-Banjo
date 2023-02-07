@@ -2,7 +2,7 @@
 
 #include <queue>
 #include <array>
-#include "../Utility/types.h"
+#include "../Utility/types.hpp"
 
 class EntityManager
 {

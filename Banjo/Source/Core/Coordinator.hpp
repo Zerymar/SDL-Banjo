@@ -2,9 +2,8 @@
 
 
 #include "EntityManager.h"
-//#include "EventManager.hpp"
 #include "SystemManager.hpp"
-#include "../Utility/types.h"
+#include "../Utility/types.hpp"
 #include <memory>
 #include "ComponentManager.hpp"
 
@@ -90,6 +89,6 @@ public:
 protected:
     std::unique_ptr<ComponentManager> m_ComponentManager;
     std::unique_ptr<EntityManager> m_EntityManager;
-    //std::unique_ptr<EventManager> m_EventManager;
+   // std::unique_ptr<EventManager> m_EventManager;
     std::unique_ptr<SystemManager> m_SystemManager;
 };
