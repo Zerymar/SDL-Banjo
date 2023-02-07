@@ -87,6 +87,6 @@ void Game::run()
         // 3.3 Present Renderer
         SDL_RenderPresent(m_PRenderer);
 
-        //SDL_Delay(1000);
+        SDL_Delay(15);
     }
 }
