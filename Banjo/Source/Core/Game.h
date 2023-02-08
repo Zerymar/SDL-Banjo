@@ -2,7 +2,6 @@
 #include <SDL.h>
 
 #include "Coordinator.hpp"
-#include "MainPlayer.h"
 #include "Systems/PhysicsSystem.h"
 #include "Systems/PlayerInputSystem.h"
 #include "Systems/RenderSystem.h"
@@ -18,11 +17,7 @@ public:
 
 protected:
     SDL_Window* m_pWindow;
-    SDL_Renderer* m_PRenderer;
-    MainPlayer* m_mainPlayer;
-
-    Coordinator m_Coordinator;
-    Entity playerEntity;
+    SDL_Renderer* m_pRenderer;
 
     std::shared_ptr<RenderSystem> m_RenderSystem;
     std::shared_ptr<PhysicsSystem> m_PhysicsSystem;

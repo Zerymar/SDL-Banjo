@@ -2,11 +2,11 @@
 
 Vector3::Vector3()
 {
-    x = 0.0f;
-    y = 0.0f;
-    z = 0.0f;
+    x = 0;
+    y = 0;
+    z = 0;
 }
-Vector3::Vector3(float x, float y, float z)
+Vector3::Vector3(int x, int y, int z)
 {
     this->x = x;
     this->y = y;
@@ -61,14 +61,14 @@ Vector3 Vector3::operator*=(Vector3 const& vector)
     return *this;
 }
 
-Vector3 Vector3::operator*(float scalar) const
+Vector3 Vector3::operator*(int scalar) const
 {
     return Vector3(x*scalar,
         y*scalar,
         z*scalar);
 }
 
-Vector3 Vector3::operator*=(float scalar) 
+Vector3 Vector3::operator*=(int scalar) 
 {
     x *= scalar;
     y *= scalar;

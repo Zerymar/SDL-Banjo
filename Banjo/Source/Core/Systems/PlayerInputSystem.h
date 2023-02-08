@@ -2,6 +2,7 @@
 #include <bitset>
 #include <SDL_events.h>
 
+
 #include "System.hpp"
 
 class PlayerInputSystem : public System
@@ -13,5 +14,5 @@ public:
 
 private:
    //std::bitset<8> m_buttons;
-   float m_ScalarVelocity = 1.0f;
+   int m_ScalarVelocity = 5;
 };

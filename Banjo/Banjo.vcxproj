@@ -131,10 +131,8 @@
     </ItemDefinitionGroup>
     <ItemGroup>
         <ClCompile Include="Source\Components\InputComponent.cpp" />
-        <ClCompile Include="Source\Core\ComponentArray.cpp" />
         <ClCompile Include="Source\Core\EntityManager.cpp" />
         <ClCompile Include="Source\Core\Game.cpp" />
-        <ClCompile Include="Source\Core\MainPlayer.cpp" />
         <ClCompile Include="Source\Core\Systems\PhysicsSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\PlayerInputSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\RenderSystem.cpp" />
@@ -224,12 +222,11 @@
         <ClInclude Include="Source\Components\Player.hpp" />
         <ClInclude Include="Source\Components\RigidBody.hpp" />
         <ClInclude Include="Source\Components\Transform.hpp" />
-        <ClInclude Include="Source\Core\ComponentArray.h" />
+        <ClInclude Include="Source\Core\ComponentArray.hpp" />
         <ClInclude Include="Source\Core\ComponentManager.hpp" />
         <ClInclude Include="Source\Core\Coordinator.hpp" />
         <ClInclude Include="Source\Core\EntityManager.h" />
         <ClInclude Include="Source\Core\Game.h" />
-        <ClInclude Include="Source\Core\MainPlayer.h" />
         <ClInclude Include="Source\Core\SystemManager.hpp" />
         <ClInclude Include="Source\Core\Systems\PhysicsSystem.h" />
         <ClInclude Include="Source\Core\Systems\PlayerInputSystem.h" />

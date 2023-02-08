@@ -1,6 +1,6 @@
 ﻿#pragma once
 
-#include "ComponentArray.h"
+#include "ComponentArray.hpp"
 #include "../Utility/types.hpp"
 #include <any>
 #include <cassert>

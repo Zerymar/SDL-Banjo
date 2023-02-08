@@ -1,9 +1,13 @@
 ﻿#pragma once
 #include "PlayerInputSystem.h"
-#include "../Coordinator.hpp"
+
+#include <iostream>
+
 #include "../../Components/RigidBody.hpp"
 #include "../../Components/Transform.hpp"
-extern Coordinator g_Coordinator;
+#include "../Coordinator.hpp"
+
+extern Coordinator m_Coordinator;
 
 void PlayerInputSystem::Init()
 {
@@ -13,8 +17,8 @@ void PlayerInputSystem::Update()
 {
     for(auto& entity :m_Entities)
     {
-        auto& transformComp = g_Coordinator.GetComponent<Transform>(entity);
-        auto& rigidBodyComp = g_Coordinator.GetComponent<RigidBody>(entity);
+        auto& transformComp = m_Coordinator.GetComponent<Transform>(entity);
+        auto& rigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
 
         transformComp.position += rigidBodyComp.velocity;
     }
@@ -25,7 +29,7 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
 {
     for(auto& entity :m_Entities)
     {
-        auto& rigidBodyComp = g_Coordinator.GetComponent<RigidBody>(entity);
+        auto& rigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
         switch(event.type)
         {
             case SDL_KEYDOWN:

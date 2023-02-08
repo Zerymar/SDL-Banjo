@@ -1,11 +1,11 @@
 ﻿#pragma once
 
-
+#include "ComponentManager.hpp"
 #include "EntityManager.h"
 #include "SystemManager.hpp"
 #include "../Utility/types.hpp"
 #include <memory>
-#include "ComponentManager.hpp"
+
 
 
 class Coordinator
@@ -18,7 +18,7 @@ public:
         m_SystemManager = std::make_unique<SystemManager>();
     }
     
-// Entity block
+ // Entity block
     Entity CreateEntity()
     {
         return m_EntityManager->CreateEntity();

@@ -12,16 +12,16 @@
 #include "Systems/PlayerInputSystem.h"
 #include "Systems/RenderSystem.h"
 
-
+extern Coordinator m_Coordinator;
 Game::Game()
 {
     m_pWindow = nullptr;
-    m_PRenderer = nullptr;
+    m_pRenderer = nullptr;
 }
 
 Game::~Game()
 {
-    SDL_DestroyRenderer(m_PRenderer);
+    SDL_DestroyRenderer(m_pRenderer);
     SDL_DestroyWindow(m_pWindow);
     SDL_Quit();
 }
@@ -52,10 +52,10 @@ bool Game::init()
     }
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
-    m_PRenderer = SDL_CreateRenderer(m_pWindow, -1, rendererFlags);
-    if (m_PRenderer == nullptr)
+    m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, rendererFlags);
+    if (m_pRenderer == nullptr)
     {
-        printf("Failed to create renderer: %s\n", SDL_GetError());
+        std::cout << "Failed to create renderer: " << SDL_GetError() << std::endl;
         return false;
     }
 
@@ -108,22 +108,19 @@ bool Game::init()
     SDL_Point thirdVertex;
     thirdVertex.x = 50;
     thirdVertex.y = 0;
-    Vector3 ColorRed(255,0,0);
+    Vector3 ColorRed(255,255,255);
     
     vertices.push_back(firstVertex);
     vertices.push_back(secondVertex);
     vertices.push_back(thirdVertex);
     vertices.push_back(firstVertex);
-
-    playerEntity = m_Coordinator.CreateEntity();
-    m_Coordinator.AddComponent(playerEntity, Player{});
-    m_Coordinator.AddComponent<Gravity>(playerEntity,{Vector2(0.0f, 0.0f)});
-    m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0.0f, 0.0f),  Vector2(0.0f, 0.0f)});
-    m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(25.0f, 25.0f),  Vector2(1.0f, 1.0f)});
-    m_Coordinator.AddComponent<BasicShape>(playerEntity, {vertices,  ColorRed});
-
-  
     
+    Entity playerEntity = m_Coordinator.CreateEntity();
+    m_Coordinator.AddComponent(playerEntity, Player{});
+    m_Coordinator.AddComponent<Gravity>(playerEntity,{Vector2(0, 0)});
+    m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0, 0),  Vector2(0, 0)});
+    m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(25, 25),  Vector2(1, 1)});
+    m_Coordinator.AddComponent<BasicShape>(playerEntity, {vertices,  ColorRed});
     return true;
 }
 
@@ -143,11 +140,13 @@ void Game::run()
             }
             m_PISystem->HandleInput(event);
         }
-
         m_PISystem->Update();
         m_PhysicsSystem->Update(deltaTime);
-        m_RenderSystem->Render(m_PRenderer);
-
+        
+        SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+        SDL_RenderClear(m_pRenderer);
+        m_RenderSystem->Render(m_pRenderer);
+        SDL_RenderPresent(m_pRenderer);
         SDL_Delay(15);
     }
 }
