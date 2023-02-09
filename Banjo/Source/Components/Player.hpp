@@ -1,3 +1,6 @@
 ﻿#pragma once
 
-struct Player{};
+struct Player
+{
+    SDL_Point ProjectileSpawnLocation;
+};

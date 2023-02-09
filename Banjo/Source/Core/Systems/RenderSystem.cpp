@@ -16,6 +16,7 @@ void RenderSystem::SetOffset(std::vector<SDL_Point>& vertices, Transform transfo
     {
         vertex.x += transformComponent.position.x;
         vertex.y += transformComponent.position.y;
+
     }
 }
 

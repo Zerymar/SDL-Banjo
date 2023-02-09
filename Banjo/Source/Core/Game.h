@@ -14,6 +14,7 @@ public:
     ~Game();
     bool init();
     void run();
+    void PlayerInit();
 
 protected:
     SDL_Window* m_pWindow;

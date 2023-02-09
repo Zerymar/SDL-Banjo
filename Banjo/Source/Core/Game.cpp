@@ -97,31 +97,45 @@ bool Game::init()
     //create our entity vector
     std::vector<Entity> entities(MAX_ENTITIES-1);
     
+    PlayerInit();
+
+    //
+    return true;
+}
+
+//initialize player character
+void Game::PlayerInit()
+{
+    int triangleTipX = 65;
+    int triangleTipY = 25;
+    int r=255,g=255,b=255;
     // Initialize our player "Entity"
-    std::vector<SDL_Point> vertices;
+    std::vector<SDL_Point> player_vertices;
     SDL_Point firstVertex;
     firstVertex.x = 0;
     firstVertex.y = 0;
     SDL_Point secondVertex;
-    secondVertex.x = 25;
-    secondVertex.y = 25;
+    secondVertex.x = 0;
+    secondVertex.y = 50;
     SDL_Point thirdVertex;
-    thirdVertex.x = 50;
-    thirdVertex.y = 0;
-    Vector3 ColorRed(255,255,255);
+    thirdVertex.x = triangleTipX;
+    thirdVertex.y = triangleTipY;
+    Vector3 ColorWhite(r,g,b);
     
-    vertices.push_back(firstVertex);
-    vertices.push_back(secondVertex);
-    vertices.push_back(thirdVertex);
-    vertices.push_back(firstVertex);
+    player_vertices.push_back(firstVertex); 
+    player_vertices.push_back(secondVertex); 
+    player_vertices.push_back(thirdVertex); 
+    player_vertices.push_back(firstVertex); 
+
+
     
     Entity playerEntity = m_Coordinator.CreateEntity();
-    m_Coordinator.AddComponent(playerEntity, Player{});
+    m_Coordinator.AddComponent<Player>(playerEntity, {player_vertices[2]});
     m_Coordinator.AddComponent<Gravity>(playerEntity,{Vector2(0, 0)});
     m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0, 0),  Vector2(0, 0)});
-    m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(25, 25),  Vector2(1, 1)});
-    m_Coordinator.AddComponent<BasicShape>(playerEntity, {vertices,  ColorRed});
-    return true;
+    m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(25, 25),  Vector2(1, 1), Vector2(0,0)});
+    m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  ColorWhite});
+    
 }
 
 void Game::run()

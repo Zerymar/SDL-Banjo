@@ -10,7 +10,9 @@ class PlayerInputSystem : public System
 public:
    void Init();
    void Update();
+   void CreatePlayerProjectile();
    void HandleInput(const SDL_Event& event);
+   
 
 private:
    //std::bitset<8> m_buttons;
