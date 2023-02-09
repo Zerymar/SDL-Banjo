@@ -103,11 +103,11 @@ bool Game::init()
     firstVertex.x = 0;
     firstVertex.y = 0;
     SDL_Point secondVertex;
-    secondVertex.x = 25;
-    secondVertex.y = 25;
+    secondVertex.x = 0;
+    secondVertex.y = 50;
     SDL_Point thirdVertex;
-    thirdVertex.x = 50;
-    thirdVertex.y = 0;
+    thirdVertex.x = 55;
+    thirdVertex.y = 25;
     Vector3 ColorRed(255,255,255);
     
     vertices.push_back(firstVertex);

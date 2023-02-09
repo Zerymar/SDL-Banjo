@@ -13,6 +13,5 @@ int main(int argc, char* argv[])
         game_app.run();
         
     }
-
     return 0;
 }
