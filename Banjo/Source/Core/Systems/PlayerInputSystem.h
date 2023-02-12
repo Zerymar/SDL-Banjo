@@ -4,6 +4,7 @@
 
 
 #include "System.hpp"
+#include "../../Utility/Math/Geometry.hpp"
 
 class PlayerInputSystem : public System
 {
@@ -15,7 +16,13 @@ public:
    void MouseButtonEvent(const SDL_MouseButtonEvent& button);
    void OnEntityDelete(Entity entity) override;
 
+    
+
 private:
-   //std::bitset<8> m_buttons;
-   int m_ScalarVelocity = 5;
+    int m_ScalarVelocity = 5;
+    ORIENTATION m_Orientation = Collinear;
+    void HandleRotation(Entity entity, ORIENTATION orientation);
+    void RotateShape(std::vector<SDL_Point>& vertices, double theta);
+    void ScaleRotatedPoints(const std::vector<SDL_Point>& prevVertices,
+        std::vector<SDL_Point>& currentVertices, const SDL_Point& centerPoint);
 };

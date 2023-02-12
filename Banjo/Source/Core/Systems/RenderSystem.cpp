@@ -38,12 +38,28 @@ void RenderSystem::RenderEntities(SDL_Renderer* renderer, Vector3 Color)
         }
         else if(basicShapeComponent.m_Vertices.size() > 1)
         {
+            int polygonSides = vertices.size();
             // Make sure we draw back to our starting vertex
             SDL_Point firstVertex = vertices[0];
             vertices.push_back(firstVertex);
-            
             SetOffset(vertices, transformComponent);
+
+            // TODO: Remove
+            SDL_Point centerPoint;
+            centerPoint.x = 0;
+            centerPoint.y = 0;
+            for(int i = 0; i < polygonSides; ++i)
+            {
+                centerPoint.x += vertices[i].x;
+                centerPoint.y += vertices[i].y;
+            }
+            centerPoint.x  = centerPoint.x / polygonSides;
+            centerPoint.y  = centerPoint.y / polygonSides;
+            SDL_RenderDrawPoint(renderer, centerPoint.x, centerPoint.y);
+            //END TODO
+            
             SDL_RenderDrawLines(renderer, vertices.data(), vertices.size());
+            
         }
         
     }

@@ -1,5 +1,7 @@
 ﻿#include "AsteroidSystem.h"
 #include <random>
+
+#include "../../Components/Asteroid.hpp"
 #include "../../Utility/defs.h"
 #include "../../Utility/Math/Vector3.h"
 
@@ -98,6 +100,7 @@ void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 aste
     m_Coordinator.AddComponent<RigidBody>(asteroidEntity, {asteroidVelocity,  Vector2(0, 0)});
     m_Coordinator.AddComponent<Transform>(asteroidEntity, {asteroidPosition,  Vector2(1, 1), Vector2(0,0)});
     m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  Color});
+    m_Coordinator.AddComponent<Asteroid>(asteroidEntity, {});
     m_ActiveAsteroids.insert(asteroidEntity);
 }
 

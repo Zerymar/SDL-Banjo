@@ -5,7 +5,6 @@
 #include "../Components/Gravity.hpp"
 #include "../Components/RigidBody.hpp"
 #include "../Components/Transform.hpp"
-#include "../Components/BasicShape.hpp"
 #include "../Components/Player.hpp"
 #include "..//Components/Projectile.hpp"
 #include "../Components/Asteroid.hpp"
@@ -127,7 +126,6 @@ bool Game::init()
     std::vector<Entity> entities(MAX_ENTITIES-1);
     
     PlayerInit();
-    m_AsteroidSystem->GenerateAsteroids();
     return true;
 }
 
@@ -153,12 +151,15 @@ void Game::PlayerInit()
     player_vertices.push_back(firstVertex); 
     player_vertices.push_back(secondVertex); 
     player_vertices.push_back(thirdVertex); 
+
+    int MIDDLE_X = SCREEN_WIDTH /2;
+    int MIDDLE_Y = SCREEN_HEIGHT /2;
     
     Entity playerEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Player>(playerEntity, {player_vertices[2]});
     m_Coordinator.AddComponent<Gravity>(playerEntity,{Vector2(0, 0)});
-    m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0, 0),  Vector2(0, 0)});
-    m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(25, 25),  Vector2(1, 1), Vector2(0,0)});
+    m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0, 0),  Vector2(0, 0), Vector2(0, 0)});
+    m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(MIDDLE_X, MIDDLE_Y),  Vector2(1, 1), Vector2(0,0)});
     m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  ColorWhite});
     
 }
@@ -173,7 +174,6 @@ void Game::run()
     convexColor.y=255;
     convexColor.z=255; 
     float deltaTime = 0.0f;
-
     
     while (!bQuit)
     {
@@ -188,7 +188,7 @@ void Game::run()
         
         m_PISystem->Update();
         m_PhysicsSystem->Update(deltaTime);
-        m_AsteroidSystem->Update();
+        //m_AsteroidSystem->Update();
         m_CollisionSystem->Update();
         
         SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
