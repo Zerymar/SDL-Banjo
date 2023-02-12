@@ -108,11 +108,23 @@ public:
         return m_ComponentManager->ContainsEntity<T>(entity);
     }
 
+    bool IsPaused()
+    {
+        return m_bIsPaused;
+    }
+
+    void TogglePause()
+    {
+        m_bIsPaused = !m_bIsPaused;
+    }
+
 protected:
     std::unique_ptr<ComponentManager> m_ComponentManager;
     std::unique_ptr<EntityManager> m_EntityManager;
    // std::unique_ptr<EventManager> m_EventManager;
     std::unique_ptr<SystemManager> m_SystemManager;
     std::vector<SDL_FPoint> m_DrawnPoints;
+
+    bool m_bIsPaused = false;
     
 };

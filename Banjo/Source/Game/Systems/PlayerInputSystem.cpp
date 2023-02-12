@@ -242,6 +242,8 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                         break;
                     case SDLK_s:
                         break;
+                    case SDLK_p:
+                        break;
                     case SDLK_SPACE:
                         CreatePlayerProjectile();
                             break;
@@ -268,6 +270,9 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                     case SDLK_s:
                         m_bIsAccelerating = false;
                         rigidBodyComp.velocity= {0,0};
+                        break;
+                    case SDLK_p:
+                        m_Coordinator.TogglePause();
                         break;
                 }
                 break;

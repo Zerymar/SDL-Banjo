@@ -185,18 +185,22 @@ void Game::run()
             }
             m_PISystem->HandleInput(event);
         }
-        
-        m_PISystem->Update();
-        m_PhysicsSystem->Update(deltaTime);
-        m_AsteroidSystem->Update();
-        m_CollisionSystem->Update();
-        
-        SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
-        SDL_RenderClear(m_pRenderer);
-        m_RenderSystem->RenderEntities(m_pRenderer,m_EntityColor);
-        m_RenderSystem->RenderPoints(m_pRenderer,m_points,  m_EntityColor);
-        m_RenderSystem->RenderLines(m_pRenderer, m_Coordinator.m_ConvexHull, convexColor);
-        SDL_RenderPresent(m_pRenderer);
+
+        if(!m_Coordinator.IsPaused())
+        {
+            m_PISystem->Update();
+            m_PhysicsSystem->Update(deltaTime);
+            m_AsteroidSystem->Update();
+            m_CollisionSystem->Update();
+            SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+            SDL_RenderClear(m_pRenderer);
+            m_RenderSystem->RenderEntities(m_pRenderer,m_EntityColor);
+            m_RenderSystem->RenderPoints(m_pRenderer,m_points,  m_EntityColor);
+            m_RenderSystem->RenderLines(m_pRenderer, m_Coordinator.m_ConvexHull, convexColor);
+            SDL_RenderPresent(m_pRenderer);
+        }
+
         SDL_Delay(15);
+
     }
 }

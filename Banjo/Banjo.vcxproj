@@ -362,6 +362,7 @@
     </ItemGroup>
     <ItemGroup>
         <ClInclude Include="Source\Components\Asteroid.hpp" />
+        <ClInclude Include="Source\Components\Audio.hpp" />
         <ClInclude Include="Source\Components\BasicShape.hpp" />
         <ClInclude Include="Source\Components\Gravity.hpp" />
         <ClInclude Include="Source\Components\Player.hpp" />
