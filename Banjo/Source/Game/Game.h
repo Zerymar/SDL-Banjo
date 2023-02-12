@@ -22,8 +22,8 @@ public:
 protected:
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;
-    std::vector<SDL_Point> m_points;
-    std::vector<SDL_Point> m_convexHull;
+    std::vector<SDL_FPoint> m_points;
+    std::vector<SDL_FPoint> m_convexHull;
     
     std::shared_ptr<RenderSystem> m_RenderSystem;
     std::shared_ptr<PhysicsSystem> m_PhysicsSystem;

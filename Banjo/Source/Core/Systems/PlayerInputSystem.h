@@ -22,7 +22,7 @@ private:
     int m_ScalarVelocity = 5;
     ORIENTATION m_Orientation = Collinear;
     void HandleRotation(Entity entity, ORIENTATION orientation);
-    void RotateShape(std::vector<SDL_Point>& vertices, double theta);
-    void ScaleRotatedPoints(const std::vector<SDL_Point>& prevVertices,
-        std::vector<SDL_Point>& currentVertices, const SDL_Point& centerPoint);
+    void RotateShape(std::vector<SDL_FPoint>& vertices, double theta);
+    void ScaleRotatedPoints(const std::vector<SDL_FPoint>& prevVertices,
+        std::vector<SDL_FPoint>& currentVertices, const SDL_FPoint& centerPoint);
 };

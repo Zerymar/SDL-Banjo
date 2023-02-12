@@ -22,7 +22,7 @@ Game::Game()
     m_pWindow = nullptr;
     m_pRenderer = nullptr;
 }
-SDL_Point Geometry::point0;
+SDL_FPoint Geometry::point0;
 Game::~Game()
 {
     SDL_DestroyRenderer(m_pRenderer);
@@ -136,14 +136,14 @@ void Game::PlayerInit()
     int triangleTipY = 25;
     int r=255,g=255,b=255;
     // Initialize our player "Entity"
-    std::vector<SDL_Point> player_vertices;
-    SDL_Point firstVertex;
+    std::vector<SDL_FPoint> player_vertices;
+    SDL_FPoint firstVertex;
     firstVertex.x = 0;
     firstVertex.y = 0;
-    SDL_Point secondVertex;
+    SDL_FPoint secondVertex;
     secondVertex.x = 0;
     secondVertex.y = 50;
-    SDL_Point thirdVertex;
+    SDL_FPoint thirdVertex;
     thirdVertex.x = triangleTipX;
     thirdVertex.y = triangleTipY;
     Vector3 ColorWhite(r,g,b);

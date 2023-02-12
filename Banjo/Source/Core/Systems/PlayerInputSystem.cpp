@@ -22,7 +22,6 @@ void PlayerInputSystem::Update()
     for(auto& entity :m_Entities)
     {
         auto& transformComp = m_Coordinator.GetComponent<Transform>(entity);
-        auto& basicShapeComp = m_Coordinator.GetComponent<BasicShape>(entity);
         auto& rigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
         transformComp.position += rigidBodyComp.velocity;
 
@@ -30,33 +29,6 @@ void PlayerInputSystem::Update()
         {
             HandleRotation(entity, m_Orientation);
         }
-        
-        /*
-        for(int i = 0; i < m_targetVertices.size(); ++i)
-        {
-            SDL_Point& currentVertex = basicShapeComp.m_Vertices[i];
-            SDL_Point targetVertex = m_targetVertices[i];
-
-            // spin positive
-            if(currentVertex.x < targetVertex.x)
-            {
-                currentVertex.x += rigidBodyComp.rotationSpeed.x;
-            }
-            else
-            {
-                currentVertex.x += rigidBodyComp.rotationSpeed.x * -1;
-            }
-
-            if(currentVertex.y < targetVertex.y)
-            {
-                currentVertex.y += rigidBodyComp.rotationSpeed.y;
-            }
-            else
-            {
-                currentVertex.y += rigidBodyComp.rotationSpeed.y * -1;
-            }
-        }
-        */
     }
 }
 
@@ -68,9 +40,9 @@ void PlayerInputSystem::CreatePlayerProjectile()
         auto& playerComponent = m_Coordinator.GetComponent<Player>(entity);
         auto& transformComp = m_Coordinator.GetComponent<Transform>(entity);
         // straight line based on the 3rd vertix
-        std::vector<SDL_Point> projectile_verticies;
-        SDL_Point startPoint = playerComponent.ProjectileSpawnLocation;
-        SDL_Point endPoint;
+        std::vector<SDL_FPoint> projectile_verticies;
+        SDL_FPoint startPoint = playerComponent.ProjectileSpawnLocation;
+        SDL_FPoint endPoint;
         endPoint.x = startPoint.x + 3;
         endPoint.y = startPoint.y ;
 
@@ -80,8 +52,8 @@ void PlayerInputSystem::CreatePlayerProjectile()
         int r=255,g=255,b=255;
         Vector3 ColorWhite(r,g,b);
 
-        int projectileSpawnX = transformComp.position.x;
-        int projectileSpawnY = transformComp.position.y;
+        float projectileSpawnX = transformComp.position.x;
+        float projectileSpawnY = transformComp.position.y;
         
         Entity projectileEntity = m_Coordinator.CreateEntity();
         m_Coordinator.AddComponent<RigidBody>(projectileEntity, {Vector2(5, 0),  Vector2(0, 0)});
@@ -103,12 +75,12 @@ void PlayerInputSystem::HandleRotation(Entity entity, ORIENTATION orientation)
 
 
 
-void PlayerInputSystem::RotateShape(std::vector<SDL_Point>& vertices, double theta) {
+void PlayerInputSystem::RotateShape(std::vector<SDL_FPoint>& vertices, double theta) {
     const int polygonSides = vertices.size();
-    const std::vector<SDL_Point> previousVertices = vertices;
+    const std::vector<SDL_FPoint> previousVertices = vertices;
     
     // We need our center point to rotate around
-    SDL_Point centerPoint;
+    SDL_FPoint centerPoint;
     centerPoint.x = 0;
     centerPoint.y = 0;
     
@@ -132,8 +104,8 @@ void PlayerInputSystem::RotateShape(std::vector<SDL_Point>& vertices, double the
     // Rotate polygon around the origin
     for (int i = 0; i < polygonSides; i++)
     {
-        int x = (vertices[i].x * cos(theta)) - (vertices[i].y * sin(theta));
-        int y = (vertices[i].x * sin(theta)) + (vertices[i].y * cos(theta));
+        float x = (vertices[i].x * cos(theta)) - (vertices[i].y * sin(theta));
+        float y = (vertices[i].x * sin(theta)) + (vertices[i].y * cos(theta));
         vertices[i].x = x;
         vertices[i].y = y;
     }
@@ -149,8 +121,8 @@ void PlayerInputSystem::RotateShape(std::vector<SDL_Point>& vertices, double the
     ScaleRotatedPoints(previousVertices, vertices, centerPoint);
 }
 
-void PlayerInputSystem::ScaleRotatedPoints(const std::vector<SDL_Point>& prevVertices,
-     std::vector<SDL_Point>& currentVertices, const SDL_Point& centerPoint)
+void PlayerInputSystem::ScaleRotatedPoints(const std::vector<SDL_FPoint>& prevVertices,
+     std::vector<SDL_FPoint>& currentVertices, const SDL_FPoint& centerPoint)
 {
     std::vector<double> previousDistances;
     std::vector<double> currentDistances;
@@ -160,13 +132,13 @@ void PlayerInputSystem::ScaleRotatedPoints(const std::vector<SDL_Point>& prevVer
 
     for(const auto& point : prevVertices)
     {
-        int previousDistanceToCenter = Geometry::DistanceSquared(point, centerPoint);
+        double previousDistanceToCenter = Geometry::DistanceSquared(point, centerPoint);
         previousDistances.push_back(previousDistanceToCenter);
     }
 
     for(const auto& point : currentVertices)
     {
-        int currentDistanceToCenter = Geometry::DistanceSquared(point, centerPoint);
+        double currentDistanceToCenter = Geometry::DistanceSquared(point, centerPoint);
         currentDistances.push_back(currentDistanceToCenter);
     }
 
@@ -176,12 +148,13 @@ void PlayerInputSystem::ScaleRotatedPoints(const std::vector<SDL_Point>& prevVer
         vertexScale.push_back(scale);
     }
     
-
     int scaleIndex = 0;
     for(auto& point : currentVertices)
     {
-        point.x = centerPoint.x + (point.x - centerPoint.x) * vertexScale[scaleIndex];
-        point.y = centerPoint.y + (point.y - centerPoint.y) * vertexScale[scaleIndex];
+        double xoffSet = (point.x - centerPoint.x) * vertexScale[scaleIndex];
+        double yoffSet = ((point.y - centerPoint.y) * vertexScale[scaleIndex]);
+        point.x = centerPoint.x + xoffSet;
+        point.y = centerPoint.y + yoffSet;
         ++scaleIndex;
     }
 }
@@ -190,10 +163,10 @@ void PlayerInputSystem::MouseButtonEvent(const SDL_MouseButtonEvent& event)
 {
     if(event.button == SDL_BUTTON_LEFT)
     {
-        SDL_Point pos;
+        SDL_FPoint pos;
         pos.x =event.x;
         pos.y = event.y;
-        std::vector<SDL_Point> point;
+        std::vector<SDL_FPoint> point;
         point.push_back(pos);
 
         Vector3 ColorWhite;
@@ -269,7 +242,6 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                //MouseButtonEvent(event.button);
                 break;
             case SDL_MOUSEBUTTONUP:
                 break;

@@ -5,6 +5,6 @@
 
 struct BasicShape
 {
-    std::vector<SDL_Point> m_Vertices;
+    std::vector<SDL_FPoint> m_Vertices;
     Vector3 color;
 };

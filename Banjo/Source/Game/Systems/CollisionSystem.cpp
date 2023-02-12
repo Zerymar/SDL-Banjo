@@ -16,7 +16,7 @@ template <typename T>
 void CollisionSystem::HandleCollision(const Entity& entity, const BasicShape& a_basicShapeComponent,
     const Transform& a_transformComponent)
 {
-    std::vector<SDL_Point> a_TrueVertices = a_basicShapeComponent.m_Vertices;
+    std::vector<SDL_FPoint> a_TrueVertices = a_basicShapeComponent.m_Vertices;
     GetTrueVertices(a_TrueVertices, a_transformComponent);
     for(const auto& otherEntity : m_Entities)
     {
@@ -25,7 +25,7 @@ void CollisionSystem::HandleCollision(const Entity& entity, const BasicShape& a_
             auto& b_transformComponent = m_Coordinator.GetComponent<Transform>(otherEntity);
             auto& b_basicShapeComponent = m_Coordinator.GetComponent<BasicShape>(otherEntity);
             bool bIsComponentT = m_Coordinator.ContainsEntity<T>(otherEntity);
-            std::vector<SDL_Point> b_TrueVertices = b_basicShapeComponent.m_Vertices;
+            std::vector<SDL_FPoint> b_TrueVertices = b_basicShapeComponent.m_Vertices;
             GetTrueVertices(b_TrueVertices, b_transformComponent);
 
             if(PointInPolygon(a_TrueVertices, b_TrueVertices) && bIsComponentT)
@@ -68,7 +68,7 @@ void CollisionSystem::Update()
     m_EntitiesToDelete.clear();
 }
 
-void CollisionSystem::GetTrueVertices(std::vector<SDL_Point>& true_vertices, Transform  transformComponent)
+void CollisionSystem::GetTrueVertices(std::vector<SDL_FPoint>& true_vertices, Transform  transformComponent)
 {
     for (auto& vertex : true_vertices)
     {
@@ -84,7 +84,7 @@ void CollisionSystem::OnEntityDelete(Entity entity)
 
 // checks if any point of our polygon intersects
 // is O(N^2) worst since we're checking every point
-bool CollisionSystem::PointInPolygon(std::vector<SDL_Point> points, std::vector<SDL_Point> polygon) {
+bool CollisionSystem::PointInPolygon(std::vector<SDL_FPoint> points, std::vector<SDL_FPoint> polygon) {
 
     // number of vertices in polygon
     int verticesPolygon = polygon.size();

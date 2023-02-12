@@ -14,45 +14,45 @@ static enum ORIENTATION
 
 class Geometry
 {
-    static SDL_Point point0;
+    static SDL_FPoint point0;
 public:
     
     
     // Utility function to find next to top in Stack
-    static SDL_Point NextToTop(std::stack<SDL_Point> &stack)
+    static SDL_FPoint NextToTop(std::stack<SDL_FPoint> &stack)
     {
-        SDL_Point top = stack.top();
+        SDL_FPoint top = stack.top();
         stack.pop();
-        SDL_Point next = stack.top();
+        SDL_FPoint next = stack.top();
         stack.push(top);
         return next;
     }
 
     // Utility for swapping coordinates
-    static void SwapPoints(SDL_Point& p_a, SDL_Point& p_b)
+    static void SwapPoints(SDL_FPoint& p_a, SDL_FPoint& p_b)
     {
-        SDL_Point temp = p_a;
+        SDL_FPoint temp = p_a;
         p_a = p_b;
         p_b =temp;
     }
 
-    static double EuclideanDistance(SDL_Point p_a, SDL_Point p_b)
+    static double EuclideanDistance(SDL_FPoint p_a, SDL_FPoint p_b)
     {
-        int x = p_a.x - p_b.x;
-        int y = p_a.y - p_b.y;
+        float x = p_a.x - p_b.x;
+        float y = p_a.y - p_b.y;
         double distance  = pow(x, 2) + pow(y, 2);
         return sqrt(distance);
     }
     
-    static double DistanceSquared(SDL_Point p_a, SDL_Point p_b)
+    static double DistanceSquared(SDL_FPoint p_a, SDL_FPoint p_b)
     {
         return pow(EuclideanDistance(p_a, p_b), 2);
     }
 
     // Find ordered orientation of triplet (a,b,c)
-    static ORIENTATION FindOrientation(SDL_Point p_a, SDL_Point p_b, SDL_Point p_c)
+    static ORIENTATION FindOrientation(SDL_FPoint p_a, SDL_FPoint p_b, SDL_FPoint p_c)
     {
-        int value = (p_b.y - p_a.y) *(p_c.x - p_b.x) -
+        float value = (p_b.y - p_a.y) *(p_c.x - p_b.x) -
             (p_b.x - p_a.x)* (p_c.y - p_b.y);
         if(value == 0)
         {
@@ -66,8 +66,8 @@ public:
     // Point0
     static int compare(void const *vp_a, void const *vp_b)
     {
-        SDL_Point *p_a = (SDL_Point *) vp_a;
-        SDL_Point *p_b = (SDL_Point *) vp_b;
+        SDL_FPoint *p_a = (SDL_FPoint *) vp_a;
+        SDL_FPoint *p_b = (SDL_FPoint *) vp_b;
 
         // Find orientation
         ORIENTATION orientation = FindOrientation(point0, *p_a, *p_b);
@@ -79,15 +79,15 @@ public:
     }
     
 
-    static void ConvexHull(std::vector<SDL_Point>& convexHullPoints, std::vector<SDL_Point> points)
+    static void ConvexHull(std::vector<SDL_FPoint>& convexHullPoints, std::vector<SDL_FPoint> points)
     {
         int n = points.size();
 
         //find the bottom most point
-        int y_Min = points[0].y, minIndex = 0;
+        float y_Min = points[0].y, minIndex = 0;
         for(int i =1; i < n; ++i)
         {
-            int yCoord = points[i].y;
+            float yCoord = points[i].y;
 
             // Pick bottom most or choose the left in case of tie
             if((yCoord < y_Min) || (y_Min == yCoord &&
@@ -101,7 +101,7 @@ public:
         SwapPoints(points[0], points[minIndex]);
         //initialize our p0 and sort points
         point0 = points[0];
-        qsort(&points[1], n-1, sizeof(SDL_Point), compare);
+        qsort(&points[1], n-1, sizeof(SDL_FPoint), compare);
         // If two or more points make same angle with p0,
         // Remove all but the one that is farthest from p0
         // Remember that, in above sorting, our criteria was
@@ -126,7 +126,7 @@ public:
         // clear out our vector
         convexHullPoints.clear();
         
-        std::stack<SDL_Point> stack;
+        std::stack<SDL_FPoint> stack;
         stack.push(points[0]);
         stack.push(points[1]);
         stack.push(points[2]);
@@ -145,7 +145,7 @@ public:
 
         while(!stack.empty())
         {
-            SDL_Point point = stack.top();
+            SDL_FPoint point = stack.top();
             convexHullPoints.push_back(point);
             stack.pop();
         }

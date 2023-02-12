@@ -46,7 +46,7 @@ void AsteroidSystem::GenerateAsteroids()
 
 void AsteroidSystem::CreateAsteroid(const Vector3& Color)
 {
-    std::vector<SDL_Point> asteroidVertices;
+    std::vector<SDL_FPoint> asteroidVertices;
     CreateOutline(asteroidVertices);
     // dist randomly based on either under/before our min screen or after
     Vector2 asteroidPosition;
@@ -60,7 +60,7 @@ void AsteroidSystem::CreateAsteroid(const Vector3& Color)
     CreateAsteroidEntity(asteroidPosition, asteroidVelocity, asteroidVertices, Color);
 }
 
-void AsteroidSystem::CreateOutline(std::vector<SDL_Point>& asteroidVertices)
+void AsteroidSystem::CreateOutline(std::vector<SDL_FPoint>& asteroidVertices)
 {
     std::random_device rd; // obtain random # from hardware
     std::mt19937 gen(rd()); // seed the generator, A Mersenne Twister pseudo-random generator of 32-bit numbers with a state size of 19937 bits
@@ -68,13 +68,13 @@ void AsteroidSystem::CreateOutline(std::vector<SDL_Point>& asteroidVertices)
     std::uniform_int_distribution<> width_distr(-10 , MAX_ASTEROID_WIDTH);
     std::uniform_int_distribution<> height_distr(-10, MAX_ASTEROID_HEIGHT);
     
-    std::vector<SDL_Point> randomVertices;
+    std::vector<SDL_FPoint> randomVertices;
     // Generate out Asteroid 
     for(int j = 0; j <= ASTEROID_VERTICES; ++j)
     {
         int randX = width_distr(gen);
         int randY = height_distr(gen);
-        SDL_Point randPoint;
+        SDL_FPoint randPoint;
         randPoint.x =randX + MIN_ASTEROID_WIDTH;
         randPoint.y =randY + MIN_ASTEROID_HEIGHT;
         randomVertices.push_back(randPoint);
@@ -93,7 +93,7 @@ void AsteroidSystem::GenerateVelocity(Vector2& asteroidVelocity, const Vector2& 
 
 }
 
-void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_Point> asteroidVertices, Vector3 Color)
+void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_FPoint> asteroidVertices, Vector3 Color)
 {
     Entity asteroidEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Gravity>(asteroidEntity,{Vector2(0, 0)});

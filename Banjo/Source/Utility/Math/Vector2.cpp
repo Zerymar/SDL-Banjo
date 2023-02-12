@@ -7,7 +7,7 @@ Vector2::Vector2()
     y = 0;
 }
 
-Vector2::Vector2(int x, int y)
+Vector2::Vector2(float x, float y)
 {
     this->x = x;
     this->y = y;
@@ -59,7 +59,7 @@ Vector2 Vector2::operator*(Vector2 const& vector) const
         y * vector.y);
 }
 
-Vector2 Vector2::operator*=(int const& scalar)
+Vector2 Vector2::operator*=(float const& scalar)
 {
     x *= scalar;
     y *= scalar;
@@ -67,7 +67,7 @@ Vector2 Vector2::operator*=(int const& scalar)
     return *this;
 }
 
-Vector2 Vector2::operator*(int const& scalar ) const
+Vector2 Vector2::operator*(float const& scalar ) const
 {
     return Vector2(
     x * scalar,

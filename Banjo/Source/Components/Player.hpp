@@ -2,5 +2,5 @@
 
 struct Player
 {
-    SDL_Point ProjectileSpawnLocation;
+    SDL_FPoint ProjectileSpawnLocation;
 };

@@ -15,7 +15,7 @@
 class Coordinator
 {
 public:
-    std::vector<SDL_Point> m_ConvexHull;
+    std::vector<SDL_FPoint> m_ConvexHull;
     
     void init()
     {
@@ -92,7 +92,7 @@ public:
         m_SystemManager->SetSignature<T>(signature);
     }
 
-    void AddDrawnPoint(SDL_Point point)
+    void AddDrawnPoint(SDL_FPoint point)
     {
         m_DrawnPoints.push_back(point);
     }
@@ -113,6 +113,6 @@ protected:
     std::unique_ptr<EntityManager> m_EntityManager;
    // std::unique_ptr<EventManager> m_EventManager;
     std::unique_ptr<SystemManager> m_SystemManager;
-    std::vector<SDL_Point> m_DrawnPoints;
+    std::vector<SDL_FPoint> m_DrawnPoints;
     
 };
