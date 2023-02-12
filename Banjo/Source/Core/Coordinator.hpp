@@ -5,12 +5,15 @@
 #include "SystemManager.hpp"
 #include "../Utility/types.hpp"
 #include <memory>
+#include <SDL.h>
 
-
+#include "../Utility/Math/Geometry.hpp"
 
 class Coordinator
 {
 public:
+    std::vector<SDL_Point> m_ConvexHull;
+    
     void init()
     {
         m_ComponentManager = std::make_unique<ComponentManager>();
@@ -84,11 +87,24 @@ public:
     {
         m_SystemManager->SetSignature<T>(signature);
     }
-    
-    
+
+    void AddDrawnPoint(SDL_Point point)
+    {
+        m_DrawnPoints.push_back(point);
+    }
+
+    void GenerateConvexHull()
+    {
+        Geometry::ConvexHull(m_ConvexHull, m_DrawnPoints);
+    }
+
 protected:
     std::unique_ptr<ComponentManager> m_ComponentManager;
     std::unique_ptr<EntityManager> m_EntityManager;
    // std::unique_ptr<EventManager> m_EventManager;
     std::unique_ptr<SystemManager> m_SystemManager;
+    std::vector<SDL_Point> m_DrawnPoints;
+
+
+    
 };

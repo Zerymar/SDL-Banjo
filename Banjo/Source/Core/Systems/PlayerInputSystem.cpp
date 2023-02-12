@@ -58,6 +58,29 @@ void PlayerInputSystem::CreatePlayerProjectile()
     }
     
 }
+void PlayerInputSystem::MouseButtonEvent(const SDL_MouseButtonEvent& event)
+{
+    if(event.button == SDL_BUTTON_LEFT)
+    {
+        SDL_Point pos;
+        pos.x =event.x;
+        pos.y = event.y;
+        std::vector<SDL_Point> point;
+        point.push_back(pos);
+
+        Vector3 ColorWhite;
+        ColorWhite.x = 255;
+        ColorWhite.y = 255;
+        ColorWhite.z = 255;
+
+        Entity dotEntity = m_Coordinator.CreateEntity();
+        m_Coordinator.AddComponent<Transform>(dotEntity, {Vector2(event.x, event.y),  Vector2(1, 1), Vector2(0,0)});
+        m_Coordinator.AddComponent<BasicShape>(dotEntity, {point,  ColorWhite});
+        std:: cout << "Created Entity at "<< pos.x << "," << pos.y << std::endl;
+        m_Coordinator.AddDrawnPoint(pos);
+    }
+}
+
 
 void PlayerInputSystem::HandleInput(const SDL_Event& event)
 {
@@ -84,7 +107,10 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                         break;
                     case SDLK_SPACE:
                         CreatePlayerProjectile();
-                    break;
+                            break;
+                    case SDLK_q:
+                        m_Coordinator.GenerateConvexHull();
+                        break;
                 }
                 break;
             // Only touch when we are not moving in a direction already upon release
@@ -104,6 +130,11 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                         if(rigidBodyComp.velocity.y > 0){ rigidBodyComp.velocity.y = 0; }
                         break;
                 }
+                break;
+            case SDL_MOUSEBUTTONDOWN:
+                MouseButtonEvent(event.button);
+                break;
+            case SDL_MOUSEBUTTONUP:
                 break;
             default:
                 break;

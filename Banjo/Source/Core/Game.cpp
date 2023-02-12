@@ -105,7 +105,7 @@ bool Game::init()
     std::vector<Entity> entities(MAX_ENTITIES-1);
     
     PlayerInit();
-    GeneratePoints();
+    //GeneratePoints();
     //
     return true;
 }
@@ -205,7 +205,7 @@ void Game::run()
         SDL_RenderClear(m_pRenderer);
         m_RenderSystem->RenderEntities(m_pRenderer,m_EntityColor);
         m_RenderSystem->RenderPoints(m_pRenderer,m_points,  m_EntityColor);
-        m_RenderSystem->RenderLines(m_pRenderer, m_convexHull, convexColor);
+        m_RenderSystem->RenderLines(m_pRenderer, m_Coordinator.m_ConvexHull, convexColor);
         SDL_RenderPresent(m_pRenderer);
         SDL_Delay(15);
     }

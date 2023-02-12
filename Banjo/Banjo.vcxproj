@@ -130,7 +130,6 @@
         </Link>
     </ItemDefinitionGroup>
     <ItemGroup>
-        <ClCompile Include="Source\Components\InputComponent.cpp" />
         <ClCompile Include="Source\Core\EntityManager.cpp" />
         <ClCompile Include="Source\Core\Game.cpp" />
         <ClCompile Include="Source\Core\Systems\PhysicsSystem.cpp" />
@@ -219,7 +218,6 @@
     <ItemGroup>
         <ClInclude Include="Source\Components\BasicShape.hpp" />
         <ClInclude Include="Source\Components\Gravity.hpp" />
-        <ClInclude Include="Source\Components\InputComponent.h" />
         <ClInclude Include="Source\Components\Player.hpp" />
         <ClInclude Include="Source\Components\Projectile.hpp" />
         <ClInclude Include="Source\Components\RigidBody.hpp" />

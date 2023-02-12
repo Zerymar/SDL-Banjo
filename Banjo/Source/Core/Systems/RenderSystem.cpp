@@ -30,13 +30,18 @@ void RenderSystem::RenderEntities(SDL_Renderer* renderer, Vector3 Color)
         auto& basicShapeComponent = m_Coordinator.GetComponent<BasicShape>(entity);
         auto& transformComponent = m_Coordinator.GetComponent<Transform>(entity);
         std::vector<SDL_Point> vertices = basicShapeComponent.m_Vertices;
-        SetOffset(vertices, transformComponent);
-        Vector3 Color = basicShapeComponent.color;
-        int xColor = (int) Color.x;
-        int yColor = (int) Color.y;
-        int zColor = (int) Color.z;
         
-        SDL_RenderDrawLines(renderer, vertices.data(), vertices.size());
+  
+        if(basicShapeComponent.m_Vertices.size() == 1)
+        {
+            SDL_RenderDrawPoint(renderer, vertices[0].x, vertices[0].y);
+        }
+        else if(basicShapeComponent.m_Vertices.size() > 1)
+        {
+            SetOffset(vertices, transformComponent);
+            SDL_RenderDrawLines(renderer, vertices.data(), vertices.size());
+        }
+        
     }
     
 }
@@ -44,6 +49,7 @@ void RenderSystem::RenderEntities(SDL_Renderer* renderer, Vector3 Color)
 
 void RenderSystem::RenderPoints(SDL_Renderer* renderer, const std::vector<SDL_Point> points, const Vector3 Color)
 {
+    if(points.empty()) return;
     SDL_SetRenderDrawColor(renderer, Color.x, Color.y, Color.z, 255);
     for(auto point : points)
     {
@@ -53,6 +59,7 @@ void RenderSystem::RenderPoints(SDL_Renderer* renderer, const std::vector<SDL_Po
 
 void RenderSystem::RenderLines(SDL_Renderer* renderer, std::vector<SDL_Point> points, const Vector3 Color)
 {
+    if(points.empty() || points.size() <= 1) return;
     SDL_SetRenderDrawColor(renderer, Color.x, Color.y, Color.z, 255);
     // add our first point again at the end
     const SDL_Point originPoint = points[0];
