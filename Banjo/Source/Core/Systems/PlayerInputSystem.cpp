@@ -9,6 +9,7 @@
 #include "../../Components/Player.hpp"
 #include "../../Components/Gravity.hpp"
 #include "../Coordinator.hpp"
+#include "../../Components/Projectile.hpp"
 
 extern Coordinator m_Coordinator;
 
@@ -56,6 +57,7 @@ void PlayerInputSystem::CreatePlayerProjectile()
         m_Coordinator.AddComponent<Transform>(projectileEntity, {Vector2(projectileSpawnX, projectileSpawnY),  Vector2(1, 1), Vector2(0,0)});
         m_Coordinator.AddComponent<BasicShape>(projectileEntity, {projectile_verticies,  ColorWhite});
         m_Coordinator.AddComponent<Gravity>(projectileEntity,{Vector2(0, 0)});
+        m_Coordinator.AddComponent<Projectile>(projectileEntity,{});
     }
     
 }

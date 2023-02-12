@@ -86,9 +86,7 @@ bool Game::init()
         signature.set(m_Coordinator.GetComponentType<BasicShape>());
         m_Coordinator.SetSystemSignature<PhysicsSystem>(signature);
     }
-
-    m_PhysicsSystem->Init();
-
+    
     m_PISystem = m_Coordinator.RegisterSystem<class PlayerInputSystem>();
     {
         Signature signature;
@@ -96,22 +94,35 @@ bool Game::init()
         signature.set(m_Coordinator.GetComponentType<Transform>());
         m_Coordinator.SetSystemSignature<PlayerInputSystem>(signature);
     }
-    m_PISystem->Init();
-
+    
     m_RenderSystem = m_Coordinator.RegisterSystem<class RenderSystem>();
     {
         Signature signature;
         signature.set(m_Coordinator.GetComponentType<BasicShape>());
         m_Coordinator.SetSystemSignature<RenderSystem>(signature);
     }
-    m_RenderSystem->Init();
-
+    
     m_AsteroidSystem = m_Coordinator.RegisterSystem<class AsteroidSystem>();
     {
         Signature signature;
         signature.set(m_Coordinator.GetComponentType<Asteroid>());
         m_Coordinator.SetSystemSignature<AsteroidSystem>(signature);
     }
+
+    m_CollisionSystem = m_Coordinator.RegisterSystem<class CollisionSystem>();
+    {
+        Signature signature;
+        signature.set(m_Coordinator.GetComponentType<Transform>());
+        signature.set(m_Coordinator.GetComponentType<BasicShape>());
+        m_Coordinator.SetSystemSignature<CollisionSystem>(signature);
+    }
+
+    m_PhysicsSystem->Init();
+    m_PISystem->Init();
+    m_RenderSystem->Init();
+    m_AsteroidSystem->Init();
+    m_CollisionSystem->Init();
+
     //create our entity vector
     std::vector<Entity> entities(MAX_ENTITIES-1);
     
@@ -178,6 +189,7 @@ void Game::run()
         m_PISystem->Update();
         m_PhysicsSystem->Update(deltaTime);
         m_AsteroidSystem->Update();
+        m_CollisionSystem->Update();
         
         SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(m_pRenderer);

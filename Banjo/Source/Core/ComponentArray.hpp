@@ -64,6 +64,11 @@ public:
         return m_ComponentArray[m_EntityToIndexMap[entity]];
     }
 
+    bool ContainsEntity(Entity entity)
+    {
+        return m_EntityToIndexMap.find(entity) != m_EntityToIndexMap.end();
+    }
+
 
 protected:
 

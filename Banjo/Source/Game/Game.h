@@ -2,6 +2,7 @@
 #include <SDL.h>
 
 #include "../Core/Coordinator.hpp"
+#include "../Core/Systems/CollisionSystem.h"
 #include "../Game/Systems/AsteroidSystem.h"
 #include "../Core/Systems/PhysicsSystem.h"
 #include "../Core/Systems/PlayerInputSystem.h"
@@ -26,6 +27,7 @@ protected:
     std::shared_ptr<RenderSystem> m_RenderSystem;
     std::shared_ptr<PhysicsSystem> m_PhysicsSystem;
     std::shared_ptr<AsteroidSystem> m_AsteroidSystem;
+    std::shared_ptr<CollisionSystem> m_CollisionSystem;
     std::shared_ptr<PlayerInputSystem> m_PISystem;
 
     Vector3 m_EntityColor;

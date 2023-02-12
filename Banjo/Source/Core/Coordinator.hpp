@@ -102,6 +102,12 @@ public:
         Geometry::ConvexHull(m_ConvexHull, m_DrawnPoints);
     }
 
+    template<typename T>
+    bool ContainsEntity(Entity entity)
+    {
+        return m_ComponentManager->ContainsEntity<T>(entity);
+    }
+
 protected:
     std::unique_ptr<ComponentManager> m_ComponentManager;
     std::unique_ptr<EntityManager> m_EntityManager;

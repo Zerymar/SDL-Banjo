@@ -53,6 +53,12 @@ public:
     {
         return GetComponentArray<T>()->GetData(entity);
     }
+    
+    template<typename  T>
+    bool ContainsEntity(Entity entity)
+    {
+        return GetComponentArray<T>()->ContainsEntity(entity);
+    }
 
     void EntityDestroyed(Entity entity)
     {
