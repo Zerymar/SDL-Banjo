@@ -131,11 +131,12 @@
     </ItemDefinitionGroup>
     <ItemGroup>
         <ClCompile Include="Source\Core\EntityManager.cpp" />
-        <ClCompile Include="Source\Core\Game.cpp" />
+        <ClCompile Include="Source\Core\Systems\CollisionSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\PhysicsSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\PlayerInputSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\RenderSystem.cpp" />
-        <ClCompile Include="Source\Core\Systems\ScreenBoundsSystem.cpp" />
+        <ClCompile Include="Source\Game\Game.cpp" />
+        <ClCompile Include="Source\Game\Systems\AsteroidSystem.cpp" />
         <ClCompile Include="Source\main.cpp">
           <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
           <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -210,12 +211,11 @@
           <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2-2.26.2\include;</AdditionalIncludeDirectories>
           <LinkCompiled>true</LinkCompiled>
         </ClCompile>
-        <ClCompile Include="Source\Shapes\Shape.cpp" />
-        <ClCompile Include="Source\Shapes\TriangleShape.cpp" />
         <ClCompile Include="Source\Utility\Math\Vector2.cpp" />
         <ClCompile Include="Source\Utility\Math\Vector3.cpp" />
     </ItemGroup>
     <ItemGroup>
+        <ClInclude Include="Source\Components\Asteroid.hpp" />
         <ClInclude Include="Source\Components\BasicShape.hpp" />
         <ClInclude Include="Source\Components\Gravity.hpp" />
         <ClInclude Include="Source\Components\Player.hpp" />
@@ -226,17 +226,17 @@
         <ClInclude Include="Source\Core\ComponentManager.hpp" />
         <ClInclude Include="Source\Core\Coordinator.hpp" />
         <ClInclude Include="Source\Core\EntityManager.h" />
-        <ClInclude Include="Source\Core\Game.h" />
         <ClInclude Include="Source\Core\SystemManager.hpp" />
+        <ClInclude Include="Source\Core\Systems\CollisionSystem.h" />
         <ClInclude Include="Source\Core\Systems\PhysicsSystem.h" />
         <ClInclude Include="Source\Core\Systems\PlayerInputSystem.h" />
         <ClInclude Include="Source\Core\Systems\RenderSystem.h" />
-        <ClInclude Include="Source\Core\Systems\ScreenBoundsSystem.h" />
         <ClInclude Include="Source\Core\Systems\System.hpp" />
-        <ClInclude Include="Source\Shapes\Shape.h" />
-        <ClInclude Include="Source\Shapes\TriangleShape.h" />
+        <ClInclude Include="Source\Game\Game.h" />
+        <ClInclude Include="Source\Game\Systems\AsteroidSystem.h" />
         <ClInclude Include="Source\Utility\defs.h" />
         <ClInclude Include="Source\Utility\Math\Geometry.hpp" />
+        <ClInclude Include="Source\Utility\Math\MathUtil.hpp" />
         <ClInclude Include="Source\Utility\Math\Vector2.h" />
         <ClInclude Include="Source\Utility\Math\Vector3.h" />
         <ClInclude Include="Source\Utility\types.hpp" />

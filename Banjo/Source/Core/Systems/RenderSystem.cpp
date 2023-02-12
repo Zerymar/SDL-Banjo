@@ -70,3 +70,8 @@ void RenderSystem::RenderLines(SDL_Renderer* renderer, std::vector<SDL_Point> po
     points.push_back(originPoint);
     SDL_RenderDrawLines(renderer, points.data(), points.size());
 }
+
+void RenderSystem::OnEntityDelete(Entity entity)
+{
+    System::OnEntityDelete(entity);
+}

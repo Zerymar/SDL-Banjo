@@ -35,6 +35,7 @@ public:
         {
             auto const& system = pair.second;
             system->m_Entities.erase(entity);
+            system->OnEntityDelete(entity);
         }
     }
 

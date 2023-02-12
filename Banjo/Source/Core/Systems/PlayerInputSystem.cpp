@@ -28,6 +28,7 @@ void PlayerInputSystem::Update()
     
 }
 
+
 void PlayerInputSystem::CreatePlayerProjectile()
 {
     for(auto& entity : m_Entities)
@@ -79,6 +80,11 @@ void PlayerInputSystem::MouseButtonEvent(const SDL_MouseButtonEvent& event)
         std:: cout << "Created Entity at "<< pos.x << "," << pos.y << std::endl;
         m_Coordinator.AddDrawnPoint(pos);
     }
+}
+
+void PlayerInputSystem::OnEntityDelete(Entity entity)
+{
+    System::OnEntityDelete(entity);
 }
 
 
@@ -133,7 +139,7 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
-                MouseButtonEvent(event.button);
+                //MouseButtonEvent(event.button);
                 break;
             case SDL_MOUSEBUTTONUP:
                 break;

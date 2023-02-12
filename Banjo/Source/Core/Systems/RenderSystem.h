@@ -16,6 +16,6 @@ public:
     void RenderEntities(SDL_Renderer* renderer, Vector3 Color);
     void RenderPoints(SDL_Renderer* renderer, std::vector<SDL_Point> points, Vector3 Color);
     void RenderLines(SDL_Renderer* renderer, std::vector<SDL_Point> points, Vector3 Color);
-
+    void OnEntityDelete(Entity entity) override;
     
 };

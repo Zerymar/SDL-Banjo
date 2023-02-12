@@ -1,10 +1,13 @@
 ﻿#pragma once
 
+#include <iostream>
+
 #include "ComponentManager.hpp"
 #include "EntityManager.h"
 #include "SystemManager.hpp"
 #include "../Utility/types.hpp"
 #include <memory>
+#include <ostream>
 #include <SDL.h>
 
 #include "../Utility/Math/Geometry.hpp"
@@ -29,6 +32,7 @@ public:
 
     void DestroyEntity(Entity entity)
     {
+        std::cout << "Destroying Entity: " << entity << std::endl;
         m_EntityManager->DestroyEntity(entity);
         m_ComponentManager->EntityDestroyed(entity);
         m_SystemManager->EntityDestroyed(entity);
@@ -104,7 +108,5 @@ protected:
    // std::unique_ptr<EventManager> m_EventManager;
     std::unique_ptr<SystemManager> m_SystemManager;
     std::vector<SDL_Point> m_DrawnPoints;
-
-
     
 };

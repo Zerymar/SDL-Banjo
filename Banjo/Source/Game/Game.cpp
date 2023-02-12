@@ -7,13 +7,15 @@
 #include "../Components/Transform.hpp"
 #include "../Components/BasicShape.hpp"
 #include "../Components/Player.hpp"
-#include "../Components/Projectile.hpp"
+#include "..//Components/Projectile.hpp"
+#include "../Components/Asteroid.hpp"
 #include "../Utility/defs.h"
 #include "../Utility/Math/Vector2.h"
 #include "../Utility/Math/Geometry.hpp"
-#include "Systems/PhysicsSystem.h"
-#include "Systems/PlayerInputSystem.h"
-#include "Systems/RenderSystem.h"
+#include "../Core/Systems/PhysicsSystem.h"
+#include "../Core/Systems/PlayerInputSystem.h"
+#include "../Core/Systems/RenderSystem.h"
+#include "../Game/Systems/AsteroidSystem.h"
 
 extern Coordinator m_Coordinator;
 Game::Game()
@@ -73,6 +75,7 @@ bool Game::init()
     m_Coordinator.RegisterComponent<BasicShape>();
     m_Coordinator.RegisterComponent<Player>();
     m_Coordinator.RegisterComponent<Projectile>();
+    m_Coordinator.RegisterComponent<Asteroid>();
 
     m_PhysicsSystem = m_Coordinator.RegisterSystem<class PhysicsSystem>();
     {
@@ -80,6 +83,7 @@ bool Game::init()
         signature.set(m_Coordinator.GetComponentType<Gravity>());
         signature.set(m_Coordinator.GetComponentType<RigidBody>());
         signature.set(m_Coordinator.GetComponentType<Transform>());
+        signature.set(m_Coordinator.GetComponentType<BasicShape>());
         m_Coordinator.SetSystemSignature<PhysicsSystem>(signature);
     }
 
@@ -101,12 +105,18 @@ bool Game::init()
         m_Coordinator.SetSystemSignature<RenderSystem>(signature);
     }
     m_RenderSystem->Init();
+
+    m_AsteroidSystem = m_Coordinator.RegisterSystem<class AsteroidSystem>();
+    {
+        Signature signature;
+        signature.set(m_Coordinator.GetComponentType<Asteroid>());
+        m_Coordinator.SetSystemSignature<AsteroidSystem>(signature);
+    }
     //create our entity vector
     std::vector<Entity> entities(MAX_ENTITIES-1);
     
     PlayerInit();
-    //GeneratePoints();
-    //
+    m_AsteroidSystem->GenerateAsteroids();
     return true;
 }
 
@@ -142,68 +152,6 @@ void Game::PlayerInit()
     
 }
 
-void Game::GenerateAsteroids(const int& minAsteroids)
-{
-    std::random_device rd; // obtain random # from hardware
-    std::mt19937 gen(rd()); // seed the generator, A Mersenne Twister pseudo-random generator of 32-bit numbers with a state size of 19937 bits
-
-    int r=255,g=255,b=255;
-    Vector3 ColorWhite(r,g,b);
-    
-    // use our max points as padding for easy debug
-    std::uniform_int_distribution<> width_distr(-10 , MAX_ASTEROID_WIDTH);
-    std::uniform_int_distribution<> height_distr(-10, MAX_ASTEROID_HEIGHT);
-
-    for(int i = 0; i < MAX_ASTEROIDS; ++i)
-    {
-        std::vector<SDL_Point> randomVertices;
-        std::vector<SDL_Point> asteroidVertices;
-        // Generate out Asteroid 
-        for(int j = 0; j <= ASTEROID_VERTICES; ++j)
-        {
-            int randX = width_distr(gen);
-            int randY = height_distr(gen);
-            SDL_Point randPoint;
-            randPoint.x =randX + MIN_ASTEROID_WIDTH;
-            randPoint.y =randY + MIN_ASTEROID_HEIGHT;
-            randomVertices.push_back(randPoint);
-        }
-        Geometry::ConvexHull(asteroidVertices, randomVertices);
-
-        
-        // dist randomly based on either under/before our min screen or after
-        const bool beforeAfter = rand() % 2;
-        const int xOffScreenBuffer = beforeAfter ? OFFSCREEN_SPAWN_BUFFER *-1 : SCREEN_WIDTH+OFFSCREEN_SPAWN_BUFFER ; // Our buffer for position off screen
-        const int x_min = beforeAfter ? xOffScreenBuffer : SCREEN_WIDTH;
-        const int x_max = beforeAfter ?  0 : xOffScreenBuffer ;
-
-        const int YOffScreenBuffer = beforeAfter ? OFFSCREEN_SPAWN_BUFFER *-1 : SCREEN_HEIGHT+OFFSCREEN_SPAWN_BUFFER ; // Our buffer for position off screen
-        const int Y_min = beforeAfter ? YOffScreenBuffer : SCREEN_HEIGHT;
-        const int Y_max = beforeAfter ?  0 : YOffScreenBuffer ;
-        
-        std::uniform_int_distribution<> x_spawn_dist(x_min , x_max);
-        std::uniform_int_distribution<> y_spawn_dist(Y_min, Y_max);
-        Vector2 asteroidPosition;
-        asteroidPosition.x = width_distr(gen);
-        asteroidPosition.y = height_distr(gen);
-        
-        Vector2 asteroidVelocity;
-        // Make our way to center of screen
-        int xVelocity = SCREEN_WIDTH/2 - asteroidPosition.x > 0 ? 1 : -1;
-        int yVelocity = SCREEN_HEIGHT/2 - asteroidPosition.y > 0 ? 1 : -1;
-        asteroidVelocity.x = xVelocity ;
-        asteroidVelocity.y = yVelocity;
-
-        //Inc speed if necessary
-        asteroidVelocity *= 1;
-        
-        Entity asteroidEntity = m_Coordinator.CreateEntity();
-        m_Coordinator.AddComponent<Gravity>(asteroidEntity,{Vector2(0, 0)});
-        m_Coordinator.AddComponent<RigidBody>(asteroidEntity, {asteroidVelocity,  Vector2(0, 0)});
-        m_Coordinator.AddComponent<Transform>(asteroidEntity, {asteroidPosition,  Vector2(1, 1), Vector2(0,0)});
-        m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  ColorWhite});
-    }
-}
 void Game::run()
 {
     bool bQuit = false;
@@ -215,7 +163,7 @@ void Game::run()
     convexColor.z=255; 
     float deltaTime = 0.0f;
 
-    GenerateAsteroids(1);
+    
     while (!bQuit)
     {
         while (SDL_PollEvent(&event) != 0)
@@ -229,6 +177,7 @@ void Game::run()
         
         m_PISystem->Update();
         m_PhysicsSystem->Update(deltaTime);
+        m_AsteroidSystem->Update();
         
         SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(m_pRenderer);

@@ -1,5 +1,5 @@
 #include <SDL.h>
-#include "Core/Game.h"
+#include "Game/Game.h"
 #include "Core/Coordinator.hpp"
 
 Coordinator m_Coordinator;

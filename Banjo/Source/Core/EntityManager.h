@@ -22,6 +22,4 @@ protected:
 
     // Total living entities - how many currently exist
     uint32_t m_LivingEntityCount{};
-    
-    
 };
