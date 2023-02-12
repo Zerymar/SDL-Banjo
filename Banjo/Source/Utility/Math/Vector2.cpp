@@ -1,5 +1,7 @@
 ﻿#include "Vector2.h"
 
+#include <complex>
+
 
 Vector2::Vector2()
 {
@@ -72,6 +74,13 @@ Vector2 Vector2::operator*(float const& scalar ) const
     return Vector2(
     x * scalar,
     y * scalar);
+}
+
+void Vector2::normalize()
+{
+    float magnitude = std::sqrt(pow(x, 2) + pow(y ,2));
+    this->x = this->x / magnitude;
+    this->y = this->y / magnitude;
 }
 
 float Vector2::dot_product(Vector2 const& vectorA, Vector2 const& vectorB)

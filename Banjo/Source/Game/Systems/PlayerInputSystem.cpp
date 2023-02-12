@@ -2,13 +2,13 @@
 #include "PlayerInputSystem.h"
 
 #include <iostream>
-
 #include "../../Components/RigidBody.hpp"
 #include "../../Components/Transform.hpp"
 #include "../../Components/BasicShape.hpp"
 #include "../../Components/Player.hpp"
 #include "../../Components/Gravity.hpp"
 #include "../../Components/Projectile.hpp"
+#include "../../Utility/defs.h"
 
 extern Coordinator m_Coordinator;
 
@@ -31,9 +31,31 @@ void PlayerInputSystem::Update()
         {
             HandleRotation(entity, m_Orientation);
         }
+        if(m_bIsAccelerating)
+        {
+            rigidBodyComp.velocity = GetPlayerPointDirection(entity) * PLAYER_SPEED;
+        }
     }
 }
 
+
+Vector2 PlayerInputSystem::GetPlayerPointDirection(const Entity& entity)
+{
+    auto& basicShapeComp = m_Coordinator.GetComponent<BasicShape>(entity);
+    auto& rigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
+    
+    SDL_FPoint TipPoint = basicShapeComp.m_Vertices[2];
+    // halfway between the other two vertices;
+    SDL_FPoint ReferencePoint;
+    ReferencePoint.x = (basicShapeComp.m_Vertices[1].x + basicShapeComp.m_Vertices[0].x) / 2;
+    ReferencePoint.y = (basicShapeComp.m_Vertices[1].y + basicShapeComp.m_Vertices[0].y) / 2;
+
+    float x = TipPoint.x - ReferencePoint.x;
+    float y = TipPoint.y - ReferencePoint.y;
+    Vector2 velocity {x, y};
+    velocity.normalize();
+    return velocity;
+}
 
 void PlayerInputSystem::CreatePlayerProjectile()
 {
@@ -41,12 +63,15 @@ void PlayerInputSystem::CreatePlayerProjectile()
     {
         auto& playerComponent = m_Coordinator.GetComponent<Player>(entity);
         auto& transformComp = m_Coordinator.GetComponent<Transform>(entity);
+        auto& playerRigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
         // straight line based on the 3rd vertix
         std::vector<SDL_FPoint> projectile_verticies;
+        Vector2 velocityDirection = GetPlayerPointDirection(entity);
+        
         SDL_FPoint startPoint = playerComponent.ProjectileSpawnLocation;
         SDL_FPoint endPoint;
-        endPoint.x = startPoint.x + 3;
-        endPoint.y = startPoint.y ;
+        endPoint.x = startPoint.x + + velocityDirection.x;
+        endPoint.y = startPoint.y + + velocityDirection.y;
 
         projectile_verticies.push_back(startPoint);
         projectile_verticies.push_back(endPoint);
@@ -56,13 +81,15 @@ void PlayerInputSystem::CreatePlayerProjectile()
 
         float projectileSpawnX = transformComp.position.x;
         float projectileSpawnY = transformComp.position.y;
+
         
         Entity projectileEntity = m_Coordinator.CreateEntity();
-        m_Coordinator.AddComponent<RigidBody>(projectileEntity, {Vector2(5, 0),  Vector2(0, 0)});
+        m_Coordinator.AddComponent<RigidBody>(projectileEntity, {(velocityDirection * PLAYER_PROJECTILE_SPEED) + playerRigidBodyComp.velocity ,  Vector2(0, 0)});
         m_Coordinator.AddComponent<Transform>(projectileEntity, {Vector2(projectileSpawnX, projectileSpawnY),  Vector2(1, 1), Vector2(0,0)});
         m_Coordinator.AddComponent<BasicShape>(projectileEntity, {projectile_verticies,  ColorWhite});
         m_Coordinator.AddComponent<Gravity>(projectileEntity,{Vector2(0, 0)});
         m_Coordinator.AddComponent<Projectile>(projectileEntity,{});
+        
     }
     
 }
@@ -211,10 +238,9 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                          rigidBodyComp.rotationSpeed = {1,1};
                          break;
                     case SDLK_w:
-                        rigidBodyComp.velocity.x = m_ScalarVelocity;
+                        m_bIsAccelerating = true;
                         break;
                     case SDLK_s:
-                        rigidBodyComp.velocity.x = -m_ScalarVelocity;
                         break;
                     case SDLK_SPACE:
                         CreatePlayerProjectile();
@@ -236,10 +262,12 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                          rigidBodyComp.rotationSpeed = {0,0};
                         break;
                     case SDLK_w:
-                        if(rigidBodyComp.velocity.x > 0){ rigidBodyComp.velocity.x = 0; }
+                        m_bIsAccelerating = false;
+                         rigidBodyComp.velocity= {0,0};
                          break;
                     case SDLK_s:
-                        if(rigidBodyComp.velocity.x < 0){ rigidBodyComp.velocity.x = 0; }
+                        m_bIsAccelerating = false;
+                        rigidBodyComp.velocity= {0,0};
                         break;
                 }
                 break;

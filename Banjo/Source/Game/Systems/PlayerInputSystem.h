@@ -5,6 +5,7 @@
 #include "../../Core/Coordinator.hpp"
 #include "../../Core/Systems/System.hpp"
 #include "../../Utility/Math/Geometry.hpp"
+#include "../../Utility/Math/Vector2.h"
 
 class PlayerInputSystem : public System
 {
@@ -19,10 +20,12 @@ public:
     
 
 private:
-    int m_ScalarVelocity = 5;
+    float m_ScalarVelocity = 5;
+    bool m_bIsAccelerating = false;
     ORIENTATION m_Orientation = Collinear;
     void HandleRotation(Entity entity, ORIENTATION orientation);
     void RotateShape(std::vector<SDL_FPoint>& vertices, double theta);
     void ScaleRotatedPoints(const std::vector<SDL_FPoint>& prevVertices,
         std::vector<SDL_FPoint>& currentVertices, const SDL_FPoint& centerPoint);
+    Vector2 GetPlayerPointDirection(const Entity& entity);
 };

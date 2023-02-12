@@ -132,9 +132,9 @@ bool Game::init()
 //initialize player character
 void Game::PlayerInit()
 {
-    int triangleTipX = 65;
-    int triangleTipY = 25;
-    int r=255,g=255,b=255;
+    float triangleTipX = 65.0f;
+    float triangleTipY = 25.0f;
+    float r=255.0f,g=255.0f,b=255.0f;
     // Initialize our player "Entity"
     std::vector<SDL_FPoint> player_vertices;
     SDL_FPoint firstVertex;
@@ -152,14 +152,14 @@ void Game::PlayerInit()
     player_vertices.push_back(secondVertex); 
     player_vertices.push_back(thirdVertex); 
 
-    int MIDDLE_X = SCREEN_WIDTH /2;
-    int MIDDLE_Y = SCREEN_HEIGHT /2;
+    float MIDDLE_X = SCREEN_WIDTH /2.0f;
+    float MIDDLE_Y = SCREEN_HEIGHT /2.0f;
     
     Entity playerEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Player>(playerEntity, {player_vertices[2]});
-    m_Coordinator.AddComponent<Gravity>(playerEntity,{Vector2(0, 0)});
-    m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0, 0),  Vector2(0, 0), Vector2(0, 0)});
-    m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(MIDDLE_X, MIDDLE_Y),  Vector2(1, 1), Vector2(0,0)});
+    m_Coordinator.AddComponent<Gravity>(playerEntity,{Vector2(0.f, 0.f)});
+    m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0.f, 0.f),  Vector2(0.f, 0.f), Vector2(0.f, 0.f)});
+    m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(MIDDLE_X, MIDDLE_Y),  Vector2(1.0f, 1.0f), Vector2(0.f,0.f)});
     m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  ColorWhite});
     
 }
@@ -188,7 +188,7 @@ void Game::run()
         
         m_PISystem->Update();
         m_PhysicsSystem->Update(deltaTime);
-        //m_AsteroidSystem->Update();
+        m_AsteroidSystem->Update();
         m_CollisionSystem->Update();
         
         SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);

@@ -45,11 +45,8 @@ void RenderSystem::RenderEntities(SDL_Renderer* renderer, Vector3 Color)
             SetOffset(vertices, transformComponent);
             const int polygonSides = vertices.size();
             SDL_RenderDrawLinesF(renderer, vertices.data(), polygonSides);
-            
         }
-        
     }
-    
 }
 
 
@@ -70,6 +67,7 @@ void RenderSystem::RenderLines(SDL_Renderer* renderer, std::vector<SDL_FPoint> p
     // add our first point again at the end
     const SDL_FPoint originPoint = points[0];
     points.push_back(originPoint);
+    
     SDL_RenderDrawLinesF(renderer, points.data(), points.size());
 }
 

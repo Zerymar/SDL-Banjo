@@ -22,5 +22,5 @@ public:
     static float dot_product(Vector3 const& vectorA, Vector3 const& vectorB);
     static Vector3 cross_product(Vector3 const& vectorA, Vector3 const& vectorB);
 
-    int x, y, z;
+    float x, y, z;
 };
