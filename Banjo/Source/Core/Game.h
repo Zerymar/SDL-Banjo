@@ -30,5 +30,5 @@ protected:
 
     Vector3 m_EntityColor;
     
-    void GeneratePoints();
+    void GenerateAsteroids(const int& maxAsteroids);
 };

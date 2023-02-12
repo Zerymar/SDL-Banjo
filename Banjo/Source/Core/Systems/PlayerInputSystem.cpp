@@ -109,7 +109,8 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                         CreatePlayerProjectile();
                             break;
                     case SDLK_q:
-                        m_Coordinator.GenerateConvexHull();
+                        //m_Coordinator.GenerateConvexHull();
+                        
                         break;
                 }
                 break;

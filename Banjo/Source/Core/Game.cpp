@@ -132,9 +132,6 @@ void Game::PlayerInit()
     player_vertices.push_back(firstVertex); 
     player_vertices.push_back(secondVertex); 
     player_vertices.push_back(thirdVertex); 
-    player_vertices.push_back(firstVertex); 
-
-
     
     Entity playerEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Player>(playerEntity, {player_vertices[2]});
@@ -142,41 +139,70 @@ void Game::PlayerInit()
     m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0, 0),  Vector2(0, 0)});
     m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(25, 25),  Vector2(1, 1), Vector2(0,0)});
     m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  ColorWhite});
-
-
     
 }
-void Game::GeneratePoints()
-{
-    // draw a random set of points
-    //
-    int shapeWidth = 700;
-    int shapeHeight = 700;
 
-    int shapeXOrigin = SCREEN_WIDTH/2;
-    int shapeYOrigin = SCREEN_HEIGHT/2;
-    
-    int MAX_POINTS =90;
+void Game::GenerateAsteroids(const int& minAsteroids)
+{
     std::random_device rd; // obtain random # from hardware
     std::mt19937 gen(rd()); // seed the generator, A Mersenne Twister pseudo-random generator of 32-bit numbers with a state size of 19937 bits
 
+    int r=255,g=255,b=255;
+    Vector3 ColorWhite(r,g,b);
+    
     // use our max points as padding for easy debug
-    std::uniform_int_distribution<> x_distr(0 , shapeWidth);
-    std::uniform_int_distribution<> y_distr(0, shapeHeight);
-    
-    for(int i = 0; i <= MAX_POINTS;++i)
+    std::uniform_int_distribution<> width_distr(-10 , MAX_ASTEROID_WIDTH);
+    std::uniform_int_distribution<> height_distr(-10, MAX_ASTEROID_HEIGHT);
+
+    for(int i = 0; i < MAX_ASTEROIDS; ++i)
     {
-        int randX = x_distr(gen);
-        int randY = y_distr(gen);
-        SDL_Point randPoint;
-        randPoint.x =randX;
-        randPoint.y =randY;
+        std::vector<SDL_Point> randomVertices;
+        std::vector<SDL_Point> asteroidVertices;
+        // Generate out Asteroid 
+        for(int j = 0; j <= ASTEROID_VERTICES; ++j)
+        {
+            int randX = width_distr(gen);
+            int randY = height_distr(gen);
+            SDL_Point randPoint;
+            randPoint.x =randX + MIN_ASTEROID_WIDTH;
+            randPoint.y =randY + MIN_ASTEROID_HEIGHT;
+            randomVertices.push_back(randPoint);
+        }
+        Geometry::ConvexHull(asteroidVertices, randomVertices);
 
-        m_points.push_back(randPoint);
+        
+        // dist randomly based on either under/before our min screen or after
+        const bool beforeAfter = rand() % 2;
+        const int xOffScreenBuffer = beforeAfter ? OFFSCREEN_SPAWN_BUFFER *-1 : SCREEN_WIDTH+OFFSCREEN_SPAWN_BUFFER ; // Our buffer for position off screen
+        const int x_min = beforeAfter ? xOffScreenBuffer : SCREEN_WIDTH;
+        const int x_max = beforeAfter ?  0 : xOffScreenBuffer ;
+
+        const int YOffScreenBuffer = beforeAfter ? OFFSCREEN_SPAWN_BUFFER *-1 : SCREEN_HEIGHT+OFFSCREEN_SPAWN_BUFFER ; // Our buffer for position off screen
+        const int Y_min = beforeAfter ? YOffScreenBuffer : SCREEN_HEIGHT;
+        const int Y_max = beforeAfter ?  0 : YOffScreenBuffer ;
+        
+        std::uniform_int_distribution<> x_spawn_dist(x_min , x_max);
+        std::uniform_int_distribution<> y_spawn_dist(Y_min, Y_max);
+        Vector2 asteroidPosition;
+        asteroidPosition.x = width_distr(gen);
+        asteroidPosition.y = height_distr(gen);
+        
+        Vector2 asteroidVelocity;
+        // Make our way to center of screen
+        int xVelocity = SCREEN_WIDTH/2 - asteroidPosition.x > 0 ? 1 : -1;
+        int yVelocity = SCREEN_HEIGHT/2 - asteroidPosition.y > 0 ? 1 : -1;
+        asteroidVelocity.x = xVelocity ;
+        asteroidVelocity.y = yVelocity;
+
+        //Inc speed if necessary
+        asteroidVelocity *= 1;
+        
+        Entity asteroidEntity = m_Coordinator.CreateEntity();
+        m_Coordinator.AddComponent<Gravity>(asteroidEntity,{Vector2(0, 0)});
+        m_Coordinator.AddComponent<RigidBody>(asteroidEntity, {asteroidVelocity,  Vector2(0, 0)});
+        m_Coordinator.AddComponent<Transform>(asteroidEntity, {asteroidPosition,  Vector2(1, 1), Vector2(0,0)});
+        m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  ColorWhite});
     }
-
-    
-    Geometry::ConvexHull(m_convexHull, m_points);
 }
 void Game::run()
 {
@@ -188,6 +214,8 @@ void Game::run()
     convexColor.y=255;
     convexColor.z=255; 
     float deltaTime = 0.0f;
+
+    GenerateAsteroids(1);
     while (!bQuit)
     {
         while (SDL_PollEvent(&event) != 0)
@@ -198,6 +226,7 @@ void Game::run()
             }
             m_PISystem->HandleInput(event);
         }
+        
         m_PISystem->Update();
         m_PhysicsSystem->Update(deltaTime);
         

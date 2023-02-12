@@ -38,6 +38,10 @@ void RenderSystem::RenderEntities(SDL_Renderer* renderer, Vector3 Color)
         }
         else if(basicShapeComponent.m_Vertices.size() > 1)
         {
+            // Make sure we draw back to our starting vertex
+            SDL_Point firstVertex = vertices[0];
+            vertices.push_back(firstVertex);
+            
             SetOffset(vertices, transformComponent);
             SDL_RenderDrawLines(renderer, vertices.data(), vertices.size());
         }
