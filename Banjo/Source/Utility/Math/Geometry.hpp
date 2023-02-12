@@ -33,7 +33,7 @@ public:
     {
         SDL_Point temp = p_a;
         p_a = p_b;
-        p_a =temp;
+        p_b =temp;
     }
 
     static double EuclideanDistance(SDL_Point p_a, SDL_Point p_b)
@@ -93,7 +93,8 @@ public:
             if((yCoord < y_Min) || (y_Min == yCoord &&
                 points[i].x < points[minIndex].x))
             {
-                y_Min = points[i].y, minIndex =i;
+                y_Min = points[i].y;
+                minIndex =i;
             }
         }
 
@@ -109,11 +110,11 @@ public:
         
         // Reuse Points for our modified array, set the size
         int m =1;
-        for(int i = 1; i < n; i++)
+        for(int i = 1; i < n; ++i)
         {
             // keep moving up our i while angle of i, i+1 is same with respect to point0
             // we will be skipping the points
-            while(i < n-1 && FindOrientation(point0, points[i], points[i+1]) == 0){++i;}
+            while(i < n-1 && FindOrientation(point0, points[i], points[i+1]) == Collinear){++i;}
 
             points[m] = points[i];
             ++m;
