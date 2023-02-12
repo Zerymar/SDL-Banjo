@@ -12,7 +12,7 @@
 #include "../Utility/Math/Vector2.h"
 #include "../Utility/Math/Geometry.hpp"
 #include "../Core/Systems/PhysicsSystem.h"
-#include "../Core/Systems/PlayerInputSystem.h"
+#include "../Game/Systems/PlayerInputSystem.h"
 #include "../Core/Systems/RenderSystem.h"
 #include "../Game/Systems/AsteroidSystem.h"
 

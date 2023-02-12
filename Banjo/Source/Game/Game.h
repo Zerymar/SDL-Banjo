@@ -5,10 +5,8 @@
 #include "../Game/Systems/CollisionSystem.h"
 #include "../Game/Systems/AsteroidSystem.h"
 #include "../Core/Systems/PhysicsSystem.h"
-#include "../Core/Systems/PlayerInputSystem.h"
+#include "../Game/Systems/PlayerInputSystem.h"
 #include "../Core/Systems/RenderSystem.h"
-#include "../Components/BasicShape.hpp"
-
 
 class Game
 {

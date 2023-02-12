@@ -2,8 +2,8 @@
 #include <bitset>
 #include <SDL_events.h>
 
-
-#include "System.hpp"
+#include "../../Core/Coordinator.hpp"
+#include "../../Core/Systems/System.hpp"
 #include "../../Utility/Math/Geometry.hpp"
 
 class PlayerInputSystem : public System

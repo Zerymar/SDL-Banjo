@@ -8,7 +8,6 @@
 #include "../../Components/BasicShape.hpp"
 #include "../../Components/Player.hpp"
 #include "../../Components/Gravity.hpp"
-#include "../Coordinator.hpp"
 #include "../../Components/Projectile.hpp"
 
 extern Coordinator m_Coordinator;
@@ -23,6 +22,9 @@ void PlayerInputSystem::Update()
     {
         auto& transformComp = m_Coordinator.GetComponent<Transform>(entity);
         auto& rigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
+        auto& playerComp = m_Coordinator.GetComponent<Player>(entity);
+        auto& basicShapeComp = m_Coordinator.GetComponent<BasicShape>(entity);
+        playerComp.ProjectileSpawnLocation = basicShapeComp.m_Vertices[2];
         transformComp.position += rigidBodyComp.velocity;
 
         if(rigidBodyComp.rotationSpeed.x > 0)
