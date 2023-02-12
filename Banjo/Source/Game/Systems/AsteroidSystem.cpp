@@ -12,10 +12,6 @@
 
 void AsteroidSystem::Init()
 {
-    int r=255,g=255,b=255;
-    ColorWhite.x =r;
-    ColorWhite.y =g;
-    ColorWhite.z = b;
 }
 
 void AsteroidSystem::OnEntityDelete(Entity entity) 
@@ -23,7 +19,6 @@ void AsteroidSystem::OnEntityDelete(Entity entity)
     System::OnEntityDelete(entity);
     if(m_ActiveAsteroids.find(entity) != m_ActiveAsteroids.end())
     {
-        std::cout << "Asteroid Destroyed!" << std::endl;
         m_ActiveAsteroids.erase(entity);
     }
     
@@ -33,18 +28,18 @@ void AsteroidSystem::Update()
 {
     if(m_ActiveAsteroids.size() < MAX_ASTEROIDS)
     {
-        CreateAsteroid(ColorWhite);
+        CreateAsteroid();
     }
 }
 void AsteroidSystem::GenerateAsteroids()
 {
     for(int i = 0; i < MAX_ASTEROIDS; ++i)
     {
-        CreateAsteroid(ColorWhite);
+        CreateAsteroid();
     }
 }
 
-void AsteroidSystem::CreateAsteroid(const Vector3& Color)
+void AsteroidSystem::CreateAsteroid()
 {
     std::vector<SDL_FPoint> asteroidVertices;
     CreateOutline(asteroidVertices);
@@ -57,7 +52,7 @@ void AsteroidSystem::CreateAsteroid(const Vector3& Color)
         
     //Inc speed if necessary
     asteroidVelocity *= (rand() % ASTEROID_VELOCITY + 2);
-    CreateAsteroidEntity(asteroidPosition, asteroidVelocity, asteroidVertices, Color);
+    CreateAsteroidEntity(asteroidPosition, asteroidVelocity, asteroidVertices);
 }
 
 void AsteroidSystem::CreateOutline(std::vector<SDL_FPoint>& asteroidVertices)
@@ -93,13 +88,13 @@ void AsteroidSystem::GenerateVelocity(Vector2& asteroidVelocity, const Vector2& 
 
 }
 
-void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_FPoint> asteroidVertices, Vector3 Color)
+void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_FPoint> asteroidVertices)
 {
     Entity asteroidEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Gravity>(asteroidEntity,{Vector2(0, 0)});
     m_Coordinator.AddComponent<RigidBody>(asteroidEntity, {asteroidVelocity,  Vector2(0, 0)});
     m_Coordinator.AddComponent<Transform>(asteroidEntity, {asteroidPosition,  Vector2(1, 1), Vector2(0,0)});
-    m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  Color});
+    m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  m_Color});
     m_Coordinator.AddComponent<Asteroid>(asteroidEntity, {});
     m_ActiveAsteroids.insert(asteroidEntity);
 }

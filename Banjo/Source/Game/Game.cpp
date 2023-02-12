@@ -33,10 +33,6 @@ Game::~Game()
 bool Game::init()
 {
     int rendererFlags, windowFlags;
-
-    m_EntityColor.x = 255;
-    m_EntityColor.y = 255;
-    m_EntityColor.z = 255;
     // Tell renderer to use hardware acceleration
     rendererFlags = SDL_RENDERER_ACCELERATED;
     windowFlags = SDL_WINDOW_RESIZABLE;
@@ -132,9 +128,11 @@ bool Game::init()
 //initialize player character
 void Game::PlayerInit()
 {
-    float triangleTipX = 65.0f;
-    float triangleTipY = 25.0f;
-    float r=255.0f,g=255.0f,b=255.0f;
+    const float triangleTipX = 65.0f;
+    const float triangleTipY = 25.0f;
+    const float r=0.0f;
+    const float g=255.0f;
+    const float b=0.0f;
     // Initialize our player "Entity"
     std::vector<SDL_FPoint> player_vertices;
     SDL_FPoint firstVertex;
@@ -146,7 +144,8 @@ void Game::PlayerInit()
     SDL_FPoint thirdVertex;
     thirdVertex.x = triangleTipX;
     thirdVertex.y = triangleTipY;
-    Vector3 ColorWhite(r,g,b);
+    
+    Vector3 Color(r,g,b);
     
     player_vertices.push_back(firstVertex); 
     player_vertices.push_back(secondVertex); 
@@ -160,7 +159,7 @@ void Game::PlayerInit()
     m_Coordinator.AddComponent<Gravity>(playerEntity,{Vector2(0.f, 0.f)});
     m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0.f, 0.f),  Vector2(0.f, 0.f), Vector2(0.f, 0.f)});
     m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(MIDDLE_X, MIDDLE_Y),  Vector2(1.0f, 1.0f), Vector2(0.f,0.f)});
-    m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  ColorWhite});
+    m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  Color});
     
 }
 
@@ -168,11 +167,6 @@ void Game::run()
 {
     bool bQuit = false;
     SDL_Event event;
-
-    Vector3 convexColor;
-    convexColor.x=0;
-    convexColor.y=255;
-    convexColor.z=255; 
     float deltaTime = 0.0f;
     
     while (!bQuit)
@@ -194,13 +188,9 @@ void Game::run()
             m_CollisionSystem->Update();
             SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(m_pRenderer);
-            m_RenderSystem->RenderEntities(m_pRenderer,m_EntityColor);
-            m_RenderSystem->RenderPoints(m_pRenderer,m_points,  m_EntityColor);
-            m_RenderSystem->RenderLines(m_pRenderer, m_Coordinator.m_ConvexHull, convexColor);
+            m_RenderSystem->RenderEntities(m_pRenderer);
             SDL_RenderPresent(m_pRenderer);
         }
-
         SDL_Delay(15);
-
     }
 }

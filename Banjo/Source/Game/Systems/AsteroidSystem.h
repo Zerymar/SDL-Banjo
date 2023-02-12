@@ -14,12 +14,13 @@ public:
     void Update();
     void Init();
     void OnEntityDelete(Entity entity) override;
-    void CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_FPoint> asteroidVertices, Vector3 Color);
+    void CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_FPoint> asteroidVertices);
     void GenerateVelocity(Vector2& asteroidVelocity, const Vector2& asteroidPosition);
     void CreateOutline(std::vector<SDL_FPoint>& asteroidVertices);
-    void CreateAsteroid(const Vector3& Color);
+    void CreateAsteroid();
 
 protected:
-    Vector3 ColorWhite;
+    Vector3 m_Color {255,255,255};
     std::set<Entity> m_ActiveAsteroids;
+    
 };

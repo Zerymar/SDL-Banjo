@@ -20,18 +20,17 @@ void RenderSystem::SetOffset(std::vector<SDL_FPoint>& vertices, Transform transf
     }
 }
 
-void RenderSystem::RenderEntities(SDL_Renderer* renderer, Vector3 Color)
+void RenderSystem::RenderEntities(SDL_Renderer* renderer)
 {
-    SDL_SetRenderDrawColor(renderer, Color.x, Color.y, Color.z, 255);
-    
     // 2. Iterate through all entites that need to be rendered
     for(auto const& entity : m_Entities)
     {
+        
         auto& basicShapeComponent = m_Coordinator.GetComponent<BasicShape>(entity);
         auto& transformComponent = m_Coordinator.GetComponent<Transform>(entity);
         std::vector<SDL_FPoint> vertices = basicShapeComponent.m_Vertices;
-        
-  
+        Vector3 Color = basicShapeComponent.color;
+        SDL_SetRenderDrawColor(renderer, (Uint8) Color.x, (Uint8) Color.y, (Uint8) Color.z, 255);
         if(basicShapeComponent.m_Vertices.size() == 1)
         {
             SDL_RenderDrawPoint(renderer, vertices[0].x, vertices[0].y);
