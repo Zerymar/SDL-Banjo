@@ -20,9 +20,9 @@ void RenderSystem::SetOffset(std::vector<SDL_Point>& vertices, Transform transfo
     }
 }
 
-void RenderSystem::Render(SDL_Renderer* renderer)
+void RenderSystem::RenderEntities(SDL_Renderer* renderer, Vector3 Color)
 {
-    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_SetRenderDrawColor(renderer, Color.x, Color.y, Color.z, 255);
     
     // 2. Iterate through all entites that need to be rendered
     for(auto const& entity : m_Entities)
@@ -39,4 +39,23 @@ void RenderSystem::Render(SDL_Renderer* renderer)
         SDL_RenderDrawLines(renderer, vertices.data(), vertices.size());
     }
     
+}
+
+
+void RenderSystem::RenderPoints(SDL_Renderer* renderer, const std::vector<SDL_Point> points, const Vector3 Color)
+{
+    SDL_SetRenderDrawColor(renderer, Color.x, Color.y, Color.z, 255);
+    for(auto point : points)
+    {
+        SDL_RenderDrawPoint(renderer, point.x, point.y);
+    }
+}
+
+void RenderSystem::RenderLines(SDL_Renderer* renderer, std::vector<SDL_Point> points, const Vector3 Color)
+{
+    SDL_SetRenderDrawColor(renderer, Color.x, Color.y, Color.z, 255);
+    // add our first point again at the end
+    const SDL_Point originPoint = points[0];
+    points.push_back(originPoint);
+    SDL_RenderDrawLines(renderer, points.data(), points.size());
 }

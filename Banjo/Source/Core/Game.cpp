@@ -1,13 +1,16 @@
 ﻿#include "Game.h"
 #include <iostream>
+#include <random>
 
 #include "../Components/Gravity.hpp"
 #include "../Components/RigidBody.hpp"
 #include "../Components/Transform.hpp"
 #include "../Components/BasicShape.hpp"
 #include "../Components/Player.hpp"
+#include "../Components/Projectile.hpp"
 #include "../Utility/defs.h"
 #include "../Utility/Math/Vector2.h"
+#include "../Utility/Math/Geometry.hpp"
 #include "Systems/PhysicsSystem.h"
 #include "Systems/PlayerInputSystem.h"
 #include "Systems/RenderSystem.h"
@@ -18,7 +21,7 @@ Game::Game()
     m_pWindow = nullptr;
     m_pRenderer = nullptr;
 }
-
+SDL_Point Geometry::point0;
 Game::~Game()
 {
     SDL_DestroyRenderer(m_pRenderer);
@@ -30,6 +33,9 @@ bool Game::init()
 {
     int rendererFlags, windowFlags;
 
+    m_EntityColor.x = 255;
+    m_EntityColor.y = 255;
+    m_EntityColor.z = 255;
     // Tell renderer to use hardware acceleration
     rendererFlags = SDL_RENDERER_ACCELERATED;
     windowFlags = SDL_WINDOW_RESIZABLE;
@@ -66,6 +72,7 @@ bool Game::init()
     m_Coordinator.RegisterComponent<RigidBody>();
     m_Coordinator.RegisterComponent<BasicShape>();
     m_Coordinator.RegisterComponent<Player>();
+    m_Coordinator.RegisterComponent<Projectile>();
 
     m_PhysicsSystem = m_Coordinator.RegisterSystem<class PhysicsSystem>();
     {
@@ -98,7 +105,7 @@ bool Game::init()
     std::vector<Entity> entities(MAX_ENTITIES-1);
     
     PlayerInit();
-
+    GeneratePoints();
     //
     return true;
 }
@@ -135,14 +142,51 @@ void Game::PlayerInit()
     m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0, 0),  Vector2(0, 0)});
     m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(25, 25),  Vector2(1, 1), Vector2(0,0)});
     m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  ColorWhite});
+
+
     
 }
+void Game::GeneratePoints()
+{
+    // draw a random set of points
+    //
+    int shapeWidth = 700;
+    int shapeHeight = 700;
 
+    int shapeXOrigin = SCREEN_WIDTH/2;
+    int shapeYOrigin = SCREEN_HEIGHT/2;
+    
+    int MAX_POINTS =90;
+    std::random_device rd; // obtain random # from hardware
+    std::mt19937 gen(rd()); // seed the generator, A Mersenne Twister pseudo-random generator of 32-bit numbers with a state size of 19937 bits
+
+    // use our max points as padding for easy debug
+    std::uniform_int_distribution<> x_distr(0 , shapeWidth);
+    std::uniform_int_distribution<> y_distr(0, shapeHeight);
+    
+    for(int i = 0; i <= MAX_POINTS;++i)
+    {
+        int randX = x_distr(gen);
+        int randY = y_distr(gen);
+        SDL_Point randPoint;
+        randPoint.x =randX;
+        randPoint.y =randY;
+
+        m_points.push_back(randPoint);
+    }
+
+    
+    Geometry::ConvexHull(m_convexHull, m_points);
+}
 void Game::run()
 {
     bool bQuit = false;
     SDL_Event event;
 
+    Vector3 convexColor;
+    convexColor.x=0;
+    convexColor.y=255;
+    convexColor.z=255; 
     float deltaTime = 0.0f;
     while (!bQuit)
     {
@@ -159,7 +203,9 @@ void Game::run()
         
         SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
         SDL_RenderClear(m_pRenderer);
-        m_RenderSystem->Render(m_pRenderer);
+        m_RenderSystem->RenderEntities(m_pRenderer,m_EntityColor);
+        m_RenderSystem->RenderPoints(m_pRenderer,m_points,  m_EntityColor);
+        m_RenderSystem->RenderLines(m_pRenderer, m_convexHull, convexColor);
         SDL_RenderPresent(m_pRenderer);
         SDL_Delay(15);
     }

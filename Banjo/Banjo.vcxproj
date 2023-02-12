@@ -136,6 +136,7 @@
         <ClCompile Include="Source\Core\Systems\PhysicsSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\PlayerInputSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\RenderSystem.cpp" />
+        <ClCompile Include="Source\Core\Systems\ScreenBoundsSystem.cpp" />
         <ClCompile Include="Source\main.cpp">
           <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
           <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -220,6 +221,7 @@
         <ClInclude Include="Source\Components\Gravity.hpp" />
         <ClInclude Include="Source\Components\InputComponent.h" />
         <ClInclude Include="Source\Components\Player.hpp" />
+        <ClInclude Include="Source\Components\Projectile.hpp" />
         <ClInclude Include="Source\Components\RigidBody.hpp" />
         <ClInclude Include="Source\Components\Transform.hpp" />
         <ClInclude Include="Source\Core\ComponentArray.hpp" />
@@ -231,10 +233,12 @@
         <ClInclude Include="Source\Core\Systems\PhysicsSystem.h" />
         <ClInclude Include="Source\Core\Systems\PlayerInputSystem.h" />
         <ClInclude Include="Source\Core\Systems\RenderSystem.h" />
+        <ClInclude Include="Source\Core\Systems\ScreenBoundsSystem.h" />
         <ClInclude Include="Source\Core\Systems\System.hpp" />
         <ClInclude Include="Source\Shapes\Shape.h" />
         <ClInclude Include="Source\Shapes\TriangleShape.h" />
         <ClInclude Include="Source\Utility\defs.h" />
+        <ClInclude Include="Source\Utility\Math\Geometry.hpp" />
         <ClInclude Include="Source\Utility\Math\Vector2.h" />
         <ClInclude Include="Source\Utility\Math\Vector3.h" />
         <ClInclude Include="Source\Utility\types.hpp" />

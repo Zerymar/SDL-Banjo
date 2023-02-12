@@ -3,7 +3,7 @@
 #include <vector>
 #include "../../Components/Transform.hpp"
 #include "System.hpp"
-
+#include "../../Utility/Math/Vector3.h"
 
 struct Transform;
 
@@ -13,6 +13,9 @@ protected:
     void SetOffset(std::vector<SDL_Point>& vetices, Transform transformComponent);
 public:
     void Init();
-    void Render(SDL_Renderer* renderer);
+    void RenderEntities(SDL_Renderer* renderer, Vector3 Color);
+    void RenderPoints(SDL_Renderer* renderer, std::vector<SDL_Point> points, Vector3 Color);
+    void RenderLines(SDL_Renderer* renderer, std::vector<SDL_Point> points, Vector3 Color);
+
     
 };
