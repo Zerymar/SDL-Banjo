@@ -2,6 +2,8 @@
 #include <cstdlib>
 #include <algorithm>
 #include <iterator>
+#include "defs.h"
+#include "../Components/Transform.hpp"
 
 static class Util
 {
@@ -30,5 +32,17 @@ public:
             break;
         }
         return element;
+    }
+
+    static bool IsOutOfBounds(Transform transformComponent)
+    {
+        int min_deadzone_x = 0 - OFFSCREEN_DEAD_ZONE;
+        int max_deadzone_x = SCREEN_WIDTH + OFFSCREEN_DEAD_ZONE;
+
+        int min_deadzone_y = 0 - OFFSCREEN_DEAD_ZONE;
+        int max_deadzone_y = SCREEN_HEIGHT + OFFSCREEN_DEAD_ZONE;
+
+        return transformComponent.position.x < min_deadzone_x || transformComponent.position.x > max_deadzone_x
+            ||transformComponent.position.y < min_deadzone_y || transformComponent.position.y > max_deadzone_y;
     }
 };

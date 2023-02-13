@@ -54,6 +54,7 @@ void CollisionSystem::Update()
         {
             HandleCollision<Asteroid>(entity, a_basicShapeComponent, a_transformComponent);
         }
+        
         //Asteroid hits Player log
         bool bIsAsteroid = m_Coordinator.ContainsEntity<Asteroid>(entity);
         if(bIsAsteroid)

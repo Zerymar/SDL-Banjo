@@ -85,7 +85,13 @@ void PlayerInputSystem::CreatePlayerProjectile()
         float projectileSpawnX = transformComp.position.x;
         float projectileSpawnY = transformComp.position.y;
 
-        Mix_Chunk* laser = Util::Random_Element(m_LaserExplosions);
+        // Cycle through our sounds
+        if(m_laserIndex == m_LaserExplosions.size())
+        {
+            m_laserIndex = 0;
+        }
+        Mix_Chunk* laser = m_LaserExplosions[m_laserIndex];
+        ++m_laserIndex;
         
         Entity projectileEntity = m_Coordinator.CreateEntity();
         m_Coordinator.AddComponent<RigidBody>(projectileEntity, {(velocityDirection * PLAYER_PROJECTILE_SPEED) + playerRigidBodyComp.velocity ,  Vector2(0, 0)});

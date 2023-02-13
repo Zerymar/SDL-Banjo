@@ -23,6 +23,6 @@
 
 
 //SFX Counts, so we can randomize the sound
-#define LASER_SFX_COUNT 3
+#define LASER_SFX_COUNT 2
 #define ASTEROID_SFX_COUNT 9
 #define PLAYER_EXPLOSION_SFX_COUNT 1

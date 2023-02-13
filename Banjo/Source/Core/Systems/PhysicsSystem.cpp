@@ -7,7 +7,8 @@
 #include "../../Components/Transform.hpp"
 #include "../Coordinator.hpp"
 #include "../../Components/BasicShape.hpp"
-#include "../../Utility/defs.h"
+#include "../../Components/SFX.hpp"
+#include "../../Utility/Util.hpp"
 
 extern Coordinator m_Coordinator;
 
@@ -18,7 +19,7 @@ void PhysicsSystem::Init()
 
 void PhysicsSystem::Update(float deltaTime)
 {
-    for(auto const &entity : m_Entities)
+    for(auto &entity : m_Entities)
     {
         auto& rigidBodyComponent = m_Coordinator.GetComponent<RigidBody>(entity);
         auto& transformComponent = m_Coordinator.GetComponent<Transform>(entity);
@@ -33,15 +34,14 @@ void PhysicsSystem::Update(float deltaTime)
 
 
         //If our entity goes too far out of bounds, destroy it
-        int min_deadzone_x = 0 - OFFSCREEN_DEAD_ZONE;
-        int max_deadzone_x = SCREEN_WIDTH + OFFSCREEN_DEAD_ZONE;
-
-        int min_deadzone_y = 0 - OFFSCREEN_DEAD_ZONE;
-        int max_deadzone_y = SCREEN_HEIGHT + OFFSCREEN_DEAD_ZONE;
-
-        if(transformComponent.position.x < min_deadzone_x || transformComponent.position.x > max_deadzone_x
-            ||transformComponent.position.y < min_deadzone_y || transformComponent.position.y > max_deadzone_y)
+        if(Util::IsOutOfBounds(transformComponent))
         {
+            //remove destroy SFX, we don't want to play it
+            bool bHasSFX = m_Coordinator.ContainsEntity<SFX>(entity);
+            if(bHasSFX)
+            {
+                m_Coordinator.RemoveComponent<SFX>(entity);
+            }
             m_EntitiesToDelete.push_back(entity);
         }
     }

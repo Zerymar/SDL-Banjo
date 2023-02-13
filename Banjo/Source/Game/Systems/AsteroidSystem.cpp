@@ -99,7 +99,7 @@ void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 aste
     m_Coordinator.AddComponent<Transform>(asteroidEntity, {asteroidPosition,  Vector2(1, 1), Vector2(0,0)});
     m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  m_Color});
     m_Coordinator.AddComponent<Asteroid>(asteroidEntity, {});
-    m_Coordinator.AddComponent<SFX>(asteroidEntity, {explosion});
+    m_Coordinator.AddComponent<SFX>(asteroidEntity, { nullptr, explosion});
     m_ActiveAsteroids.insert(asteroidEntity);
 }
 

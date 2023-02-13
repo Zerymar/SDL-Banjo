@@ -2,7 +2,7 @@
 
 struct SFX
 {
-    Mix_Chunk* DestroySFX;
-    Mix_Chunk* SpawnSFX;
+    Mix_Chunk *DestroySFX;
+    Mix_Chunk *SpawnSFX;
     bool m_bSpawnPlayed =false;
 };

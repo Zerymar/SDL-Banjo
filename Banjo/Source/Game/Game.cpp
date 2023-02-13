@@ -197,7 +197,6 @@ void Game::PlayerInit()
     float MIDDLE_Y = SCREEN_HEIGHT /2.0f;
 
     Mix_Chunk* explosion = Util::Random_Element(m_PlayerExplosions);
-
     
     Entity playerEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Player>(playerEntity, {player_vertices[2]});
@@ -205,7 +204,7 @@ void Game::PlayerInit()
     m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0.f, 0.f),  Vector2(0.f, 0.f), Vector2(0.f, 0.f)});
     m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(MIDDLE_X, MIDDLE_Y),  Vector2(1.0f, 1.0f), Vector2(0.f,0.f)});
     m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  Color});
-    m_Coordinator.AddComponent<SFX>(playerEntity, {explosion});
+    m_Coordinator.AddComponent<SFX>(playerEntity, {nullptr, explosion});
 }
 
 bool Game::LoadMedia()

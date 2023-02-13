@@ -59,11 +59,14 @@ public:
     {
         m_ComponentManager->RemoveComponent<T>(entity);
 
+        
         //Update signature and ntoify systems
         auto signature = m_EntityManager->GetSignature(entity);
+        std::cout << "B:" << signature << std::endl;
         signature.set(m_ComponentManager->GetComponentType<T>(), false);
         m_EntityManager->SetSignature(entity, signature);
         m_SystemManager->EntitySignatureChanged(entity, signature);
+        std::cout << "A:" << signature << std::endl;
     }
 
     template<typename T>
