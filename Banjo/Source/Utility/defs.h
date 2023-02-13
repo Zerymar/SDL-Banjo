@@ -11,6 +11,7 @@
 #define PLAYER_SIZE 50
 #define PLAYER_PROJECTILE_SPEED 10
 
+
 // Asteroid Defs
 #define MAX_ASTEROIDS 10
 #define ASTEROID_VELOCITY 3
@@ -20,3 +21,8 @@
 #define MAX_ASTEROID_HEIGHT 50
 #define ASTEROID_VERTICES 9
 
+
+//SFX Counts, so we can randomize the sound
+#define LASER_SFX_COUNT 3
+#define ASTEROID_SFX_COUNT 9
+#define PLAYER_EXPLOSION_SFX_COUNT 1

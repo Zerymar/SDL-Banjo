@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <bitset>
 #include <SDL_events.h>
-
+#include <SDL_mixer.h>
 #include "../../Core/Coordinator.hpp"
 #include "../../Core/Systems/System.hpp"
 #include "../../Utility/Math/Geometry.hpp"
@@ -10,7 +10,7 @@
 class PlayerInputSystem : public System
 {
 public:
-   void Init();
+   void Init(std::vector<Mix_Chunk*> laserExplosions);
    void Update();
    void CreatePlayerProjectile();
    void HandleInput(const SDL_Event& event);
@@ -28,4 +28,5 @@ private:
     void ScaleRotatedPoints(const std::vector<SDL_FPoint>& prevVertices,
         std::vector<SDL_FPoint>& currentVertices, const SDL_FPoint& centerPoint);
     Vector2 GetPlayerPointDirection(const Entity& entity);
+    std::vector<Mix_Chunk*> m_LaserExplosions;
 };

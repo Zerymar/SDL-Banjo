@@ -1,4 +1,6 @@
 ﻿#pragma once
+#include <SDL_mixer.h>
+
 #include "../../Core/Coordinator.hpp"
 #include "../../Utility/Math/Vector2.h"
 #include "../../Utility/Math/Vector3.h"
@@ -12,7 +14,7 @@ public:
     void GenerateAsteroids();
     void GetRandomOffScreen(Vector2& point);
     void Update();
-    void Init();
+    void Init(const std::vector<Mix_Chunk*>& asteroidExplosions);
     void OnEntityDelete(Entity entity) override;
     void CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_FPoint> asteroidVertices);
     void GenerateVelocity(Vector2& asteroidVelocity, const Vector2& asteroidPosition);
@@ -22,5 +24,6 @@ public:
 protected:
     Vector3 m_Color {255,255,255};
     std::set<Entity> m_ActiveAsteroids;
+    std::vector<Mix_Chunk*> m_asteroidExplosions;
     
 };

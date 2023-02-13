@@ -3,15 +3,17 @@
 
 #include "../../Components/Asteroid.hpp"
 #include "../../Utility/defs.h"
-#include "../../Utility/Math/Vector3.h"
+#include "../../Utility/Util.hpp"
 
 #include "../../Components/Gravity.hpp"
 #include "../../Components/RigidBody.hpp"
 #include "../../Components/Transform.hpp"
 #include "../../Components/BasicShape.hpp"
+#include "../../Components/SFX.hpp"
 
-void AsteroidSystem::Init()
+void AsteroidSystem::Init(const std::vector<Mix_Chunk*>& asteroidExplosions)
 {
+    m_asteroidExplosions = asteroidExplosions;
 }
 
 void AsteroidSystem::OnEntityDelete(Entity entity) 
@@ -90,12 +92,14 @@ void AsteroidSystem::GenerateVelocity(Vector2& asteroidVelocity, const Vector2& 
 
 void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_FPoint> asteroidVertices)
 {
+    Mix_Chunk* explosion = Util::Random_Element(m_asteroidExplosions);
     Entity asteroidEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Gravity>(asteroidEntity,{Vector2(0, 0)});
     m_Coordinator.AddComponent<RigidBody>(asteroidEntity, {asteroidVelocity,  Vector2(0, 0)});
     m_Coordinator.AddComponent<Transform>(asteroidEntity, {asteroidPosition,  Vector2(1, 1), Vector2(0,0)});
     m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  m_Color});
     m_Coordinator.AddComponent<Asteroid>(asteroidEntity, {});
+    m_Coordinator.AddComponent<SFX>(asteroidEntity, {explosion});
     m_ActiveAsteroids.insert(asteroidEntity);
 }
 

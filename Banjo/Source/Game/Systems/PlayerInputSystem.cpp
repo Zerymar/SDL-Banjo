@@ -8,12 +8,15 @@
 #include "../../Components/Player.hpp"
 #include "../../Components/Gravity.hpp"
 #include "../../Components/Projectile.hpp"
+#include "../../Components/SFX.hpp"
 #include "../../Utility/defs.h"
+#include "../../Utility/Util.hpp"
 
 extern Coordinator m_Coordinator;
 
-void PlayerInputSystem::Init()
+void PlayerInputSystem::Init(std::vector<Mix_Chunk*> laserExplosions)
 {
+    m_LaserExplosions = laserExplosions;
 }
 
 void PlayerInputSystem::Update()
@@ -82,6 +85,7 @@ void PlayerInputSystem::CreatePlayerProjectile()
         float projectileSpawnX = transformComp.position.x;
         float projectileSpawnY = transformComp.position.y;
 
+        Mix_Chunk* laser = Util::Random_Element(m_LaserExplosions);
         
         Entity projectileEntity = m_Coordinator.CreateEntity();
         m_Coordinator.AddComponent<RigidBody>(projectileEntity, {(velocityDirection * PLAYER_PROJECTILE_SPEED) + playerRigidBodyComp.velocity ,  Vector2(0, 0)});
@@ -89,6 +93,7 @@ void PlayerInputSystem::CreatePlayerProjectile()
         m_Coordinator.AddComponent<BasicShape>(projectileEntity, {projectile_verticies,  ColorWhite});
         m_Coordinator.AddComponent<Gravity>(projectileEntity,{Vector2(0, 0)});
         m_Coordinator.AddComponent<Projectile>(projectileEntity,{});
+        m_Coordinator.AddComponent<SFX>(projectileEntity,{nullptr, laser});
         
     }
     

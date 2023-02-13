@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 #include "../Core/Coordinator.hpp"
 #include "../Game/Systems/CollisionSystem.h"
@@ -7,6 +8,8 @@
 #include "../Core/Systems/PhysicsSystem.h"
 #include "../Game/Systems/PlayerInputSystem.h"
 #include "../Core/Systems/RenderSystem.h"
+#include "../Core/Systems/AudioSystem.h"
+
 
 class Game
 {
@@ -18,6 +21,8 @@ public:
     void PlayerInit();
 
 protected:
+    bool LoadMedia();
+    
     SDL_Window* m_pWindow;
     SDL_Renderer* m_pRenderer;
     std::vector<SDL_FPoint> m_points;
@@ -27,7 +32,12 @@ protected:
     std::shared_ptr<PhysicsSystem> m_PhysicsSystem;
     std::shared_ptr<AsteroidSystem> m_AsteroidSystem;
     std::shared_ptr<CollisionSystem> m_CollisionSystem;
+    std::shared_ptr<AudioSystem> m_AudioSystem;
     std::shared_ptr<PlayerInputSystem> m_PISystem;
+
+    std::vector<Mix_Chunk*> m_AsteroidExplosions;
+    std::vector<Mix_Chunk*> m_LaserExplosions;
+    std::vector<Mix_Chunk*> m_PlayerExplosions;
 
     Vector3 m_EntityColor;
     

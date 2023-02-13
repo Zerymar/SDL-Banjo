@@ -104,13 +104,13 @@
             <SDLCheck>true</SDLCheck>
             <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
             <ConformanceMode>true</ConformanceMode>
-            <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2-2.26.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+            <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2_mixer-2.6.2\include;G:\GitHub\Zerymar\SDL2-2.26.2\include;G:\GitHub\Zerymar\SDL2_image-2.6.2\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
         </ClCompile>
         <Link>
             <SubSystem>Console</SubSystem>
             <GenerateDebugInformation>true</GenerateDebugInformation>
-            <AdditionalLibraryDirectories>G:\GitHub\Zerymar\SDL2-2.26.2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-            <AdditionalDependencies>SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
+            <AdditionalLibraryDirectories>G:\GitHub\Zerymar\SDL2_mixer-2.6.2\lib\x64;G:\GitHub\Zerymar\SDL2-2.26.2\lib\x64;G:\GitHub\Zerymar\SDL2_image-2.6.2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+            <AdditionalDependencies>SDL2_image.lib;SDL2_mixer.lib;SDL2.lib;SDL2main.lib;%(AdditionalDependencies)</AdditionalDependencies>
         </Link>
     </ItemDefinitionGroup>
     <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -131,6 +131,7 @@
     </ItemDefinitionGroup>
     <ItemGroup>
         <ClCompile Include="Source\Core\EntityManager.cpp" />
+        <ClCompile Include="Source\Core\Systems\AudioSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\PhysicsSystem.cpp" />
         <ClCompile Include="Source\Core\Systems\RenderSystem.cpp" />
         <ClCompile Include="Source\Game\Game.cpp" />
@@ -206,7 +207,7 @@
           <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
           <PreprocessorDefinitions>_DEBUG;_CONSOLE;_UNICODE;UNICODE;</PreprocessorDefinitions>
           <SDLCheck>true</SDLCheck>
-          <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2-2.26.2\include;</AdditionalIncludeDirectories>
+          <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2_mixer-2.6.2\include;G:\GitHub\Zerymar\SDL2-2.26.2\include;G:\GitHub\Zerymar\SDL2_image-2.6.2\include;</AdditionalIncludeDirectories>
           <LinkCompiled>true</LinkCompiled>
         </ClCompile>
         <ClCompile Include="Source\Game\Systems\PlayerInputSystem.cpp">
@@ -280,7 +281,7 @@
           <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
           <PreprocessorDefinitions>_DEBUG;_CONSOLE;_UNICODE;UNICODE;</PreprocessorDefinitions>
           <SDLCheck>true</SDLCheck>
-          <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2-2.26.2\include;</AdditionalIncludeDirectories>
+          <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2_mixer-2.6.2\include;G:\GitHub\Zerymar\SDL2-2.26.2\include;G:\GitHub\Zerymar\SDL2_image-2.6.2\include;</AdditionalIncludeDirectories>
           <LinkCompiled>true</LinkCompiled>
         </ClCompile>
         <ClCompile Include="Source\main.cpp">
@@ -354,7 +355,7 @@
           <DisableAnalyzeExternal>false</DisableAnalyzeExternal>
           <PreprocessorDefinitions>_DEBUG;_CONSOLE;_UNICODE;UNICODE;</PreprocessorDefinitions>
           <SDLCheck>true</SDLCheck>
-          <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2-2.26.2\include;</AdditionalIncludeDirectories>
+          <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2_mixer-2.6.2\include;G:\GitHub\Zerymar\SDL2-2.26.2\include;G:\GitHub\Zerymar\SDL2_image-2.6.2\include;</AdditionalIncludeDirectories>
           <LinkCompiled>true</LinkCompiled>
         </ClCompile>
         <ClCompile Include="Source\Utility\Math\Vector2.cpp" />
@@ -362,7 +363,7 @@
     </ItemGroup>
     <ItemGroup>
         <ClInclude Include="Source\Components\Asteroid.hpp" />
-        <ClInclude Include="Source\Components\Audio.hpp" />
+        <ClInclude Include="Source\Components\SFX.hpp" />
         <ClInclude Include="Source\Components\BasicShape.hpp" />
         <ClInclude Include="Source\Components\Gravity.hpp" />
         <ClInclude Include="Source\Components\Player.hpp" />
@@ -374,6 +375,7 @@
         <ClInclude Include="Source\Core\Coordinator.hpp" />
         <ClInclude Include="Source\Core\EntityManager.h" />
         <ClInclude Include="Source\Core\SystemManager.hpp" />
+        <ClInclude Include="Source\Core\Systems\AudioSystem.h" />
         <ClInclude Include="Source\Core\Systems\PhysicsSystem.h" />
         <ClInclude Include="Source\Core\Systems\RenderSystem.h" />
         <ClInclude Include="Source\Core\Systems\System.hpp" />
@@ -387,6 +389,22 @@
         <ClInclude Include="Source\Utility\Math\Vector2.h" />
         <ClInclude Include="Source\Utility\Math\Vector3.h" />
         <ClInclude Include="Source\Utility\types.hpp" />
+        <ClInclude Include="Source\Utility\Util.hpp" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion01.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion02.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion03.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion04.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion05.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion06.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion07.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion08.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion09.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Laser\laser01.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Laser\laser02.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Laser\laser03.wav" />
+      <Content Include="Source\Resources\Media\Audio\SFX\Player\p_explosion01.wav" />
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
     <ImportGroup Label="ExtensionTargets">

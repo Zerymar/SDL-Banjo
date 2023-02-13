@@ -12,6 +12,8 @@ extern Coordinator m_Coordinator;
 void CollisionSystem::Init()
 {
 }
+
+// Do Simple Point in Polygon, queue up entities to delete 
 template <typename T>
 void CollisionSystem::HandleCollision(const Entity& entity, const BasicShape& a_basicShapeComponent,
     const Transform& a_transformComponent)
@@ -30,7 +32,6 @@ void CollisionSystem::HandleCollision(const Entity& entity, const BasicShape& a_
 
             if(PointInPolygon(a_TrueVertices, b_TrueVertices) && bIsComponentT)
             {
-                std::cout << "Collision between " << entity << " and " << otherEntity << std::endl;
                 m_EntitiesToDelete.push_back(entity);
                 m_EntitiesToDelete.push_back(otherEntity);
             }
@@ -38,6 +39,8 @@ void CollisionSystem::HandleCollision(const Entity& entity, const BasicShape& a_
     }
 }
 
+
+//Check for any collisions and delete any entities
 void CollisionSystem::Update()
 {
     for(auto& entity : m_Entities)
@@ -51,18 +54,17 @@ void CollisionSystem::Update()
         {
             HandleCollision<Asteroid>(entity, a_basicShapeComponent, a_transformComponent);
         }
-
         //Asteroid hits Player log
         bool bIsAsteroid = m_Coordinator.ContainsEntity<Asteroid>(entity);
         if(bIsAsteroid)
         {
             HandleCollision<Player>(entity, a_basicShapeComponent, a_transformComponent);
         }
-
     }
 
     for(auto& entity : m_EntitiesToDelete)
     {
+        
         m_Coordinator.DestroyEntity(entity);
     }
     m_EntitiesToDelete.clear();

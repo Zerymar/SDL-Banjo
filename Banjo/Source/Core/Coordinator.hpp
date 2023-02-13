@@ -32,7 +32,6 @@ public:
 
     void DestroyEntity(Entity entity)
     {
-        std::cout << "Destroying Entity: " << entity << std::endl;
         m_EntityManager->DestroyEntity(entity);
         m_ComponentManager->EntityDestroyed(entity);
         m_SystemManager->EntityDestroyed(entity);

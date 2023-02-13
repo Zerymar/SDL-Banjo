@@ -1,20 +1,29 @@
 ﻿#include "Game.h"
 #include <iostream>
 #include <random>
+#include <stdio.h>
+#include <SDL_image.h>
+#include <SDL_mixer.h>
+#include <string>
 
 #include "../Components/Gravity.hpp"
 #include "../Components/RigidBody.hpp"
 #include "../Components/Transform.hpp"
 #include "../Components/Player.hpp"
-#include "..//Components/Projectile.hpp"
+#include "../Components/Projectile.hpp"
 #include "../Components/Asteroid.hpp"
+#include "../Components/SFX.hpp"
+
+
 #include "../Utility/defs.h"
 #include "../Utility/Math/Vector2.h"
-#include "../Utility/Math/Geometry.hpp"
-#include "../Core/Systems/PhysicsSystem.h"
+#include "../Utility/Util.hpp"
+
 #include "../Game/Systems/PlayerInputSystem.h"
-#include "../Core/Systems/RenderSystem.h"
 #include "../Game/Systems/AsteroidSystem.h"
+
+#include "../Core/Systems/RenderSystem.h"
+#include "../Core/Systems/PhysicsSystem.h"
 
 extern Coordinator m_Coordinator;
 Game::Game()
@@ -22,7 +31,11 @@ Game::Game()
     m_pWindow = nullptr;
     m_pRenderer = nullptr;
 }
+
+//Need to keep track of Point0 for our convex hulls generator, see Geometry.hpp
 SDL_FPoint Geometry::point0;
+
+
 Game::~Game()
 {
     SDL_DestroyRenderer(m_pRenderer);
@@ -38,12 +51,12 @@ bool Game::init()
     windowFlags = SDL_WINDOW_RESIZABLE;
 
     // initialize SDL2's video subsystem
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
     {
         std::cout << "Couldn't initialize SDL: " << SDL_GetError() << std::endl;
         return false;
     }
-
+    
     m_pWindow = SDL_CreateWindow("Banjo", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, SCREEN_WIDTH, SCREEN_HEIGHT,
                                  SDL_WINDOW_SHOWN);
 
@@ -55,13 +68,34 @@ bool Game::init()
     }
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 
+    // Initialize PNG loading
+    int imgFlags = IMG_INIT_PNG;
+    if(! (IMG_Init(imgFlags) & imgFlags))
+    {
+        std::cout << "Couldn't initialize SDL_Image: " << SDL_GetError() << std::endl;
+        return false;
+    }
+
+    //initialize mixer
+    if( Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) < 0)
+    {
+        std::cout << "Couldn't initialize SDL_Mixer: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    
     m_pRenderer = SDL_CreateRenderer(m_pWindow, -1, rendererFlags);
     if (m_pRenderer == nullptr)
     {
         std::cout << "Failed to create renderer: " << SDL_GetError() << std::endl;
         return false;
     }
-
+    // Attempt to load media before anything else
+    if(!LoadMedia())
+    {
+        std::cout << "Failed to load media: " << SDL_GetError() << std::endl;
+        return false;
+    }
+    
     // initialize our components systems
     m_Coordinator.init();
     m_Coordinator.RegisterComponent<Gravity>();
@@ -71,6 +105,7 @@ bool Game::init()
     m_Coordinator.RegisterComponent<Player>();
     m_Coordinator.RegisterComponent<Projectile>();
     m_Coordinator.RegisterComponent<Asteroid>();
+    m_Coordinator.RegisterComponent<SFX>();
 
     m_PhysicsSystem = m_Coordinator.RegisterSystem<class PhysicsSystem>();
     {
@@ -112,10 +147,17 @@ bool Game::init()
         m_Coordinator.SetSystemSignature<CollisionSystem>(signature);
     }
 
+    m_AudioSystem = m_Coordinator.RegisterSystem<class AudioSystem>();
+    {
+        Signature signature;
+        signature.set(m_Coordinator.GetComponentType<SFX>());
+        m_Coordinator.SetSystemSignature<AudioSystem>(signature);
+    }
+
     m_PhysicsSystem->Init();
-    m_PISystem->Init();
+    m_PISystem->Init(m_LaserExplosions);
     m_RenderSystem->Init();
-    m_AsteroidSystem->Init();
+    m_AsteroidSystem->Init(m_AsteroidExplosions);
     m_CollisionSystem->Init();
 
     //create our entity vector
@@ -153,6 +195,9 @@ void Game::PlayerInit()
 
     float MIDDLE_X = SCREEN_WIDTH /2.0f;
     float MIDDLE_Y = SCREEN_HEIGHT /2.0f;
+
+    Mix_Chunk* explosion = Util::Random_Element(m_PlayerExplosions);
+
     
     Entity playerEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Player>(playerEntity, {player_vertices[2]});
@@ -160,7 +205,50 @@ void Game::PlayerInit()
     m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0.f, 0.f),  Vector2(0.f, 0.f), Vector2(0.f, 0.f)});
     m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(MIDDLE_X, MIDDLE_Y),  Vector2(1.0f, 1.0f), Vector2(0.f,0.f)});
     m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  Color});
-    
+    m_Coordinator.AddComponent<SFX>(playerEntity, {explosion});
+}
+
+bool Game::LoadMedia()
+{
+    // Asteroids
+    for(int i  = 1; i <= ASTEROID_SFX_COUNT; i++)
+    {
+        std::string filePath = "G:/GitHub/Zerymar/Banjo/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Asteroid/explosion0" + std::to_string(i) + ".wav";
+        Mix_Chunk* explosionSound = Mix_LoadWAV(filePath.c_str());
+        if(explosionSound == nullptr)
+        {
+            std::cout << "Failed to load file " << filePath << std::endl;
+            return false;
+        }
+        m_AsteroidExplosions.push_back(explosionSound);
+    }
+
+    // Laser
+    for(int i  = 1; i <= LASER_SFX_COUNT; i++)
+    {
+        std::string filePath = "G:/GitHub/Zerymar/Banjo/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Laser/laser0" + std::to_string(i) + ".wav";
+        Mix_Chunk* laserSound = Mix_LoadWAV(filePath.c_str());
+        if(laserSound == nullptr)
+        {
+            std::cout << "Failed to load file " << filePath << std::endl;
+            return false;
+        }
+        m_LaserExplosions.push_back(laserSound);
+    }
+
+    //Player death
+    for(int i  = 1; i <= PLAYER_EXPLOSION_SFX_COUNT; i++)
+    {
+        std::string filePath = "G:/GitHub/Zerymar/Banjo/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Player/p_explosion0" + std::to_string(i) + ".wav";
+        Mix_Chunk* playerExplosion = Mix_LoadWAV(filePath.c_str());
+        if(playerExplosion == nullptr)
+        {
+            std::cout << "Failed to load file " << filePath << std::endl;
+            return false;
+        }
+        m_PlayerExplosions.push_back(playerExplosion);
+    }
+    return true;
 }
 
 void Game::run()
@@ -186,6 +274,7 @@ void Game::run()
             m_PhysicsSystem->Update(deltaTime);
             m_AsteroidSystem->Update();
             m_CollisionSystem->Update();
+            m_AudioSystem->Update();
             SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(m_pRenderer);
             m_RenderSystem->RenderEntities(m_pRenderer);
