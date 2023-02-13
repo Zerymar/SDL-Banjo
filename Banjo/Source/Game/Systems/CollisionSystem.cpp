@@ -1,10 +1,14 @@
 ﻿#include "CollisionSystem.h"
 
 
+#include "ScoreSystem.h"
 #include "../../Components/Transform.hpp"
 #include "../../Components/Asteroid.hpp"
 #include "../../Components/Projectile.hpp"
 #include "../../Components/Player.hpp"
+#include "../../Components/SFX.hpp"
+#include "../../Core/Systems/AudioSystem.h"
+#include "../../Utility/Util.hpp"
 
 extern Coordinator m_Coordinator;
 
@@ -66,6 +70,23 @@ void CollisionSystem::Update()
     for(auto& entity : m_EntitiesToDelete)
     {
         
+        bool bHasTransform = m_Coordinator.ContainsEntity<Transform>(entity);
+        bool bHasSFX = m_Coordinator.ContainsEntity<SFX>(entity);
+        if(bHasTransform && bHasSFX)
+        {
+            auto& sfxComponent = m_Coordinator.GetComponent<SFX>(entity);
+            auto& transformComponent = m_Coordinator.GetComponent<Transform>(entity);
+            if(!Util::IsOutOfBounds(transformComponent))
+            {
+                AudioSystem::PlaySound(sfxComponent.DestroySFX, 0);
+                bool bIsAsteroid = m_Coordinator.ContainsEntity<Asteroid>(entity);
+                if(bIsAsteroid)
+                {
+                    ScoreSystem::IncrementScore(100);
+                    std::cout << "Current score: " << ScoreSystem::GetScore();
+                }
+            }
+        }
         m_Coordinator.DestroyEntity(entity);
     }
     m_EntitiesToDelete.clear();

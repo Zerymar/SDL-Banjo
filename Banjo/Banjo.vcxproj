@@ -284,6 +284,7 @@
           <AdditionalIncludeDirectories>G:\GitHub\Zerymar\SDL2_mixer-2.6.2\include;G:\GitHub\Zerymar\SDL2-2.26.2\include;G:\GitHub\Zerymar\SDL2_image-2.6.2\include;</AdditionalIncludeDirectories>
           <LinkCompiled>true</LinkCompiled>
         </ClCompile>
+        <ClCompile Include="Source\Game\Systems\ScoreSystem.cpp" />
         <ClCompile Include="Source\main.cpp">
           <RuntimeLibrary>MultiThreadedDebugDll</RuntimeLibrary>
           <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
@@ -383,6 +384,7 @@
         <ClInclude Include="Source\Game\Systems\AsteroidSystem.h" />
         <ClInclude Include="Source\Game\Systems\CollisionSystem.h" />
         <ClInclude Include="Source\Game\Systems\PlayerInputSystem.h" />
+        <ClInclude Include="Source\Game\Systems\ScoreSystem.h" />
         <ClInclude Include="Source\Utility\defs.h" />
         <ClInclude Include="Source\Utility\Math\Geometry.hpp" />
         <ClInclude Include="Source\Utility\Math\MathUtil.hpp" />
@@ -392,6 +394,7 @@
         <ClInclude Include="Source\Utility\Util.hpp" />
     </ItemGroup>
     <ItemGroup>
+      <Content Include="Source\Resources\Media\Audio\Music\maingame_bgm.wav" />
       <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion01.wav" />
       <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion02.wav" />
       <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion03.wav" />

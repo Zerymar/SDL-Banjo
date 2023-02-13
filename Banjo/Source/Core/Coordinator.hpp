@@ -10,6 +10,7 @@
 #include <ostream>
 #include <SDL.h>
 
+#include "../Game/Systems/ScoreSystem.h"
 #include "../Utility/Math/Geometry.hpp"
 
 class Coordinator
@@ -58,15 +59,11 @@ public:
     void RemoveComponent(Entity entity)
     {
         m_ComponentManager->RemoveComponent<T>(entity);
-
-        
         //Update signature and ntoify systems
         auto signature = m_EntityManager->GetSignature(entity);
-        std::cout << "B:" << signature << std::endl;
         signature.set(m_ComponentManager->GetComponentType<T>(), false);
         m_EntityManager->SetSignature(entity, signature);
         m_SystemManager->EntitySignatureChanged(entity, signature);
-        std::cout << "A:" << signature << std::endl;
     }
 
     template<typename T>
@@ -120,12 +117,20 @@ public:
         m_bIsPaused = !m_bIsPaused;
     }
 
+    void SetScoreSystem(std::shared_ptr<ScoreSystem> scoreSystem)
+    {
+        m_ScoreSystem = scoreSystem;
+    }
+    
+
 protected:
     std::unique_ptr<ComponentManager> m_ComponentManager;
     std::unique_ptr<EntityManager> m_EntityManager;
    // std::unique_ptr<EventManager> m_EventManager;
     std::unique_ptr<SystemManager> m_SystemManager;
     std::vector<SDL_FPoint> m_DrawnPoints;
+
+    std::shared_ptr<ScoreSystem> m_ScoreSystem;
 
     bool m_bIsPaused = false;
     

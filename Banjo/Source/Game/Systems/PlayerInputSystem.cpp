@@ -9,6 +9,7 @@
 #include "../../Components/Gravity.hpp"
 #include "../../Components/Projectile.hpp"
 #include "../../Components/SFX.hpp"
+#include "../../Core/Systems/AudioSystem.h"
 #include "../../Utility/defs.h"
 #include "../../Utility/Util.hpp"
 
@@ -100,7 +101,7 @@ void PlayerInputSystem::CreatePlayerProjectile()
         m_Coordinator.AddComponent<Gravity>(projectileEntity,{Vector2(0, 0)});
         m_Coordinator.AddComponent<Projectile>(projectileEntity,{});
         m_Coordinator.AddComponent<SFX>(projectileEntity,{nullptr, laser});
-        
+        AudioSystem::PlaySound(laser, -1);
     }
     
 }

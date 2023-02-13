@@ -25,6 +25,7 @@
 #include "../Core/Systems/RenderSystem.h"
 #include "../Core/Systems/PhysicsSystem.h"
 
+
 extern Coordinator m_Coordinator;
 Game::Game()
 {
@@ -153,13 +154,21 @@ bool Game::init()
         signature.set(m_Coordinator.GetComponentType<SFX>());
         m_Coordinator.SetSystemSignature<AudioSystem>(signature);
     }
+    
+    m_ScoreSystem = m_Coordinator.RegisterSystem<class ScoreSystem>();
+    {
+        Signature signature;
+        m_Coordinator.SetSystemSignature<ScoreSystem>(signature);
+    }
 
+    m_ScoreSystem->Init();
     m_PhysicsSystem->Init();
     m_PISystem->Init(m_LaserExplosions);
     m_RenderSystem->Init();
     m_AsteroidSystem->Init(m_AsteroidExplosions);
     m_CollisionSystem->Init();
 
+    m_Coordinator.SetScoreSystem(m_ScoreSystem);
     //create our entity vector
     std::vector<Entity> entities(MAX_ENTITIES-1);
     
@@ -209,6 +218,16 @@ void Game::PlayerInit()
 
 bool Game::LoadMedia()
 {
+    // Music
+    std::string bgmPath = "G:/GitHub/Zerymar/Banjo/SDL-Banjo/Banjo/Source/Resources/Media/Audio/Music/maingame_bgm.wav";
+    m_BGM = Mix_LoadMUS(bgmPath.c_str());
+    if(m_BGM == nullptr)
+    {
+        std::cout << "Failed to load file " << bgmPath << std::endl;
+        return false;
+    }
+
+    
     // Asteroids
     for(int i  = 1; i <= ASTEROID_SFX_COUNT; i++)
     {
@@ -265,6 +284,11 @@ void Game::run()
                 bQuit = true;
             }
             m_PISystem->HandleInput(event);
+        }
+
+        if(Mix_PlayingMusic() == 0)
+        {
+            Mix_PlayMusic(m_BGM, -1);
         }
 
         if(!m_Coordinator.IsPaused())

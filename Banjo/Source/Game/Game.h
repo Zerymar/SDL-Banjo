@@ -9,6 +9,7 @@
 #include "../Game/Systems/PlayerInputSystem.h"
 #include "../Core/Systems/RenderSystem.h"
 #include "../Core/Systems/AudioSystem.h"
+#include "Systems/ScoreSystem.h"
 
 
 class Game
@@ -32,6 +33,7 @@ protected:
     std::shared_ptr<PhysicsSystem> m_PhysicsSystem;
     std::shared_ptr<AsteroidSystem> m_AsteroidSystem;
     std::shared_ptr<CollisionSystem> m_CollisionSystem;
+    std::shared_ptr<ScoreSystem> m_ScoreSystem;
     std::shared_ptr<AudioSystem> m_AudioSystem;
     std::shared_ptr<PlayerInputSystem> m_PISystem;
 
@@ -40,6 +42,7 @@ protected:
     std::vector<Mix_Chunk*> m_PlayerExplosions;
 
     Vector3 m_EntityColor;
-    
+    Mix_Music * m_BGM;
 
+    double SCORE = 0;
 };
