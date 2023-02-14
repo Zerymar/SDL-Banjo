@@ -68,6 +68,7 @@ public:
             component->EntityDestroyed(entity);
         }
     }
+    
 
 private:
     std::unordered_map<const char*, ComponentType> m_ComponentTypes{};

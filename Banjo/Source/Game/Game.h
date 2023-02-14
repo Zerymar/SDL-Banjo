@@ -44,5 +44,4 @@ protected:
     Vector3 m_EntityColor;
     Mix_Music * m_BGM;
 
-    double SCORE = 0;
 };

@@ -154,21 +154,21 @@ bool Game::init()
         signature.set(m_Coordinator.GetComponentType<SFX>());
         m_Coordinator.SetSystemSignature<AudioSystem>(signature);
     }
-    
+    /*
     m_ScoreSystem = m_Coordinator.RegisterSystem<class ScoreSystem>();
     {
         Signature signature;
         m_Coordinator.SetSystemSignature<ScoreSystem>(signature);
     }
 
-    m_ScoreSystem->Init();
+    m_ScoreSystem->Init();*/
     m_PhysicsSystem->Init();
     m_PISystem->Init(m_LaserExplosions);
     m_RenderSystem->Init();
     m_AsteroidSystem->Init(m_AsteroidExplosions);
     m_CollisionSystem->Init();
 
-    m_Coordinator.SetScoreSystem(m_ScoreSystem);
+    //m_Coordinator.SetScoreSystem(m_ScoreSystem);
     //create our entity vector
     std::vector<Entity> entities(MAX_ENTITIES-1);
     
@@ -219,7 +219,7 @@ void Game::PlayerInit()
 bool Game::LoadMedia()
 {
     // Music
-    std::string bgmPath = "G:/GitHub/Zerymar/Banjo/SDL-Banjo/Banjo/Source/Resources/Media/Audio/Music/maingame_bgm.wav";
+    std::string bgmPath = "C:/Users/cesar/OneDrive/Documents/GitHub/SDL-Banjo/Banjo/Source/Resources/Media/Audio/Music/maingame_bgm.wav";
     m_BGM = Mix_LoadMUS(bgmPath.c_str());
     if(m_BGM == nullptr)
     {
@@ -231,7 +231,7 @@ bool Game::LoadMedia()
     // Asteroids
     for(int i  = 1; i <= ASTEROID_SFX_COUNT; i++)
     {
-        std::string filePath = "G:/GitHub/Zerymar/Banjo/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Asteroid/explosion0" + std::to_string(i) + ".wav";
+        std::string filePath = "C:/Users/cesar/OneDrive/Documents/GitHub/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Asteroid/explosion0" + std::to_string(i) + ".wav";
         Mix_Chunk* explosionSound = Mix_LoadWAV(filePath.c_str());
         if(explosionSound == nullptr)
         {
@@ -244,7 +244,8 @@ bool Game::LoadMedia()
     // Laser
     for(int i  = 1; i <= LASER_SFX_COUNT; i++)
     {
-        std::string filePath = "G:/GitHub/Zerymar/Banjo/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Laser/laser0" + std::to_string(i) + ".wav";
+        
+        std::string filePath = "C:/Users/cesar/OneDrive/Documents/GitHub/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Laser/laser0" + std::to_string(i) + ".wav";
         Mix_Chunk* laserSound = Mix_LoadWAV(filePath.c_str());
         if(laserSound == nullptr)
         {
@@ -257,7 +258,7 @@ bool Game::LoadMedia()
     //Player death
     for(int i  = 1; i <= PLAYER_EXPLOSION_SFX_COUNT; i++)
     {
-        std::string filePath = "G:/GitHub/Zerymar/Banjo/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Player/p_explosion0" + std::to_string(i) + ".wav";
+        std::string filePath = "C:/Users/cesar/OneDrive/Documents/GitHub/SDL-Banjo/Banjo/Source/Resources/Media/Audio/SFX/Player/p_explosion0" + std::to_string(i) + ".wav";
         Mix_Chunk* playerExplosion = Mix_LoadWAV(filePath.c_str());
         if(playerExplosion == nullptr)
         {
@@ -291,6 +292,14 @@ void Game::run()
             Mix_PlayMusic(m_BGM, -1);
         }
 
+        if(m_Coordinator.ShouldRestart())
+        {
+            // delete all our entities and redo our player init
+            m_Coordinator.ToggleRestartFlag();
+            m_Coordinator.DestroyAllEntities();
+            PlayerInit();
+        }
+        
         if(!m_Coordinator.IsPaused())
         {
             m_PISystem->Update();

@@ -231,6 +231,7 @@ void PlayerInputSystem::OnEntityDelete(Entity entity)
 
 void PlayerInputSystem::HandleInput(const SDL_Event& event)
 {
+    // Player Input
     for(auto& entity :m_Entities)
     {
         auto& rigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
@@ -286,6 +287,7 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                     case SDLK_p:
                         m_Coordinator.TogglePause();
                         break;
+                    break;
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:
@@ -295,5 +297,22 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
             default:
                 break;
         }
+    }
+
+    // Gamewide input
+    switch(event.type)
+    {
+    case SDL_KEYUP:
+        switch(event.key.keysym.sym)
+        {
+            case SDLK_r:
+                m_Coordinator.ToggleRestartFlag();
+                break;
+            default:
+                break;
+        }
+        break;
+    default:
+        break;
     }
 }

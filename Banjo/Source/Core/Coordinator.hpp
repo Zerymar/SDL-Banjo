@@ -37,6 +37,19 @@ public:
         m_ComponentManager->EntityDestroyed(entity);
         m_SystemManager->EntityDestroyed(entity);
     }
+
+    void DestroyAllEntities()
+    {
+        std::set<Entity> destroyedEntities;
+        m_EntityManager->DestroyAllEntities(destroyedEntities);
+        for(auto& entity : destroyedEntities)
+        {
+            m_ComponentManager->EntityDestroyed(entity);
+            m_SystemManager->EntityDestroyed(entity);
+        }
+        destroyedEntities.clear();
+    }
+    
 //Component Methods
     template<typename T>
     void RegisterComponent()
@@ -117,11 +130,17 @@ public:
         m_bIsPaused = !m_bIsPaused;
     }
 
-    void SetScoreSystem(std::shared_ptr<ScoreSystem> scoreSystem)
+    bool ShouldRestart()
     {
-        m_ScoreSystem = scoreSystem;
+        return m_bRestartGame;
+    }
+
+    void ToggleRestartFlag()
+    {
+        m_bRestartGame = !m_bRestartGame;
     }
     
+
 
 protected:
     std::unique_ptr<ComponentManager> m_ComponentManager;
@@ -129,9 +148,7 @@ protected:
    // std::unique_ptr<EventManager> m_EventManager;
     std::unique_ptr<SystemManager> m_SystemManager;
     std::vector<SDL_FPoint> m_DrawnPoints;
-
-    std::shared_ptr<ScoreSystem> m_ScoreSystem;
-
     bool m_bIsPaused = false;
+    bool m_bRestartGame = false;
     
 };

@@ -19,6 +19,7 @@ Entity EntityManager::CreateEntity()
     Entity availableId = m_AvailableEntities.front();
     m_AvailableEntities.pop(); // pop -Beau
     ++m_LivingEntityCount;
+    m_CreatedEntities.insert(availableId);
     return availableId;
 }
 
@@ -31,12 +32,28 @@ Signature EntityManager::GetSignature(Entity entity)
 void EntityManager::DestroyEntity(Entity entity)
 {
     assert(entity < MAX_ENTITIES && "Entity out of range.");
+    InvalidateEntity(entity);
+    m_CreatedEntities.erase(entity);
+}
+
+void EntityManager::InvalidateEntity(Entity entity)
+{
     //Invalidate signature
     m_Signatures[entity].reset();
 
     //Push ID back into Queue
     m_AvailableEntities.push(entity);
     --m_LivingEntityCount;
+}
+
+void EntityManager::DestroyAllEntities(std::set<Entity>& DestroyedEntities)
+{
+    for(auto& entity : m_CreatedEntities)
+    {
+        InvalidateEntity(entity);
+        DestroyedEntities.insert(entity);
+    }
+    m_CreatedEntities.clear();
 }
 
 void EntityManager::SetSignature(Entity entity, Signature signature)

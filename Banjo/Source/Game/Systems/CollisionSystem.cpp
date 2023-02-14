@@ -82,8 +82,8 @@ void CollisionSystem::Update()
                 bool bIsAsteroid = m_Coordinator.ContainsEntity<Asteroid>(entity);
                 if(bIsAsteroid)
                 {
-                    ScoreSystem::IncrementScore(100);
-                    std::cout << "Current score: " << ScoreSystem::GetScore();
+                    //ScoreSystem::IncrementScore(100);
+                    //std::cout << "Current score: " << ScoreSystem::GetScore();
                 }
             }
         }
