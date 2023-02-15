@@ -24,7 +24,7 @@ private:
     bool m_bIsAccelerating = false;
     ORIENTATION m_Orientation = Collinear;
     void HandleRotation(Entity entity, ORIENTATION orientation);
-    void RotateShape(std::vector<SDL_FPoint>& vertices, double theta);
+    void RotateShape(std::vector<SDL_FPoint>& vertices, float theta);
     void ScaleRotatedPoints(const std::vector<SDL_FPoint>& prevVertices,
         std::vector<SDL_FPoint>& currentVertices, const SDL_FPoint& centerPoint);
     Vector2 GetPlayerPointDirection(const Entity& entity);

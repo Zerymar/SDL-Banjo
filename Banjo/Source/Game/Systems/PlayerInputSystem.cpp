@@ -10,7 +10,6 @@
 #include "../../Components/Projectile.hpp"
 #include "../../Components/SFX.hpp"
 #include "../../Core/Systems/AudioSystem.h"
-#include "../../Utility/defs.h"
 #include "../../Utility/Util.hpp"
 
 extern Coordinator m_Coordinator;
@@ -116,7 +115,7 @@ void PlayerInputSystem::HandleRotation(Entity entity, ORIENTATION orientation)
 
 
 
-void PlayerInputSystem::RotateShape(std::vector<SDL_FPoint>& vertices, double theta) {
+void PlayerInputSystem::RotateShape(std::vector<SDL_FPoint>& vertices, float theta) {
     const int polygonSides = vertices.size();
     const std::vector<SDL_FPoint> previousVertices = vertices;
     
@@ -205,7 +204,7 @@ void PlayerInputSystem::MouseButtonEvent(const SDL_MouseButtonEvent& event)
     if(event.button == SDL_BUTTON_LEFT)
     {
         SDL_FPoint pos;
-        pos.x =event.x;
+        pos.x = event.x;
         pos.y = event.y;
         std::vector<SDL_FPoint> point;
         point.push_back(pos);

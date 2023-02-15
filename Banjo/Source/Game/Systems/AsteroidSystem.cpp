@@ -9,6 +9,7 @@
 #include "../../Components/RigidBody.hpp"
 #include "../../Components/Transform.hpp"
 #include "../../Components/BasicShape.hpp"
+#include "../../Components/ScorePoints.hpp"
 #include "../../Components/SFX.hpp"
 
 void AsteroidSystem::Init(const std::vector<Mix_Chunk*>& asteroidExplosions)
@@ -100,6 +101,7 @@ void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 aste
     m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  m_Color});
     m_Coordinator.AddComponent<Asteroid>(asteroidEntity, {});
     m_Coordinator.AddComponent<SFX>(asteroidEntity, { explosion, nullptr });
+    m_Coordinator.AddComponent<ScorePoints>(asteroidEntity, { 100 });
     m_ActiveAsteroids.insert(asteroidEntity);
 }
 
