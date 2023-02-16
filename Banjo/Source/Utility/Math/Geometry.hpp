@@ -5,7 +5,7 @@
 #include <math.h>
 
 
-static enum ORIENTATION
+enum ORIENTATION
 {
     CounterClockwise = -1,
     Collinear = 0,
@@ -81,10 +81,11 @@ public:
 
     static void ConvexHull(std::vector<SDL_FPoint>& convexHullPoints, std::vector<SDL_FPoint> points)
     {
-        int n = points.size();
+        int n = static_cast<int>(points.size());
 
         //find the bottom most point
-        float y_Min = points[0].y, minIndex = 0;
+        float y_Min = points[0].y;
+        int minIndex = 0;
         for(int i =1; i < n; ++i)
         {
             float yCoord = points[i].y;

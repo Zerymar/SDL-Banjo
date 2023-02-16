@@ -23,15 +23,10 @@ void PhysicsSystem::Update(float deltaTime)
     {
         auto& rigidBodyComponent = m_Coordinator.GetComponent<RigidBody>(entity);
         auto& transformComponent = m_Coordinator.GetComponent<Transform>(entity);
-        auto& basicShapeComponent = m_Coordinator.GetComponent<BasicShape>(entity);
-
-        // Gravity force
-        auto& gravity = m_Coordinator.GetComponent<Gravity>(entity);
-
+        
+        
         //Apply our movement
         transformComponent.position += rigidBodyComponent.velocity; //* deltaTime;
-        rigidBodyComponent.velocity += gravity.force; //* deltaTime;
-
 
         //If our entity goes too far out of bounds, destroy it
         if(Util::IsOutOfBounds(transformComponent))
@@ -42,17 +37,9 @@ void PhysicsSystem::Update(float deltaTime)
             {
                 m_Coordinator.RemoveComponent<SFX>(entity);
             }
-            m_EntitiesToDelete.push_back(entity);
+            m_Coordinator.QueueEntityToDelete(entity);
         }
     }
-
-    for(auto const& entity: m_EntitiesToDelete)
-    {
-        m_Coordinator.DestroyEntity(entity);
-    }
-
-    //clear out queue
-    m_EntitiesToDelete.clear();
 }
 
 void PhysicsSystem::OnEntityDelete(Entity entity)

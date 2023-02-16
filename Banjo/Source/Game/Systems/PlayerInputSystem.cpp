@@ -34,23 +34,17 @@ void PlayerInputSystem::Update()
         {
             HandleRotation(entity, m_Orientation);
         }
-        if(m_bIsAccelerating)
+        if(m_bIsAccelerating )//&& rigidBodyComp.velocity != (rigidBodyComp.velocity * PLAYER_SPEED) )
         {
             rigidBodyComp.velocity = GetPlayerPointDirection(entity) * PLAYER_SPEED;
         }
-
     }
-
-
-    
 }
 
 
 Vector2 PlayerInputSystem::GetPlayerPointDirection(const Entity& entity)
 {
     auto& basicShapeComp = m_Coordinator.GetComponent<BasicShape>(entity);
-    auto& rigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
-    
     SDL_FPoint TipPoint = basicShapeComp.m_Vertices[2];
     // halfway between the other two vertices;
     SDL_FPoint ReferencePoint;
@@ -71,14 +65,14 @@ void PlayerInputSystem::CreatePlayerProjectile()
         auto& playerComponent = m_Coordinator.GetComponent<Player>(entity);
         auto& transformComp = m_Coordinator.GetComponent<Transform>(entity);
         auto& playerRigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
-        // straight line based on the 3rd vertix
+        // straight line based on the 3rd vertex
         std::vector<SDL_FPoint> projectile_verticies;
         Vector2 velocityDirection = GetPlayerPointDirection(entity);
         
         SDL_FPoint startPoint = playerComponent.ProjectileSpawnLocation;
         SDL_FPoint endPoint;
-        endPoint.x = startPoint.x + + velocityDirection.x;
-        endPoint.y = startPoint.y + + velocityDirection.y;
+        endPoint.x = startPoint.x  + velocityDirection.x;
+        endPoint.y = startPoint.y  + velocityDirection.y;
 
         projectile_verticies.push_back(startPoint);
         projectile_verticies.push_back(endPoint);
@@ -90,23 +84,21 @@ void PlayerInputSystem::CreatePlayerProjectile()
         float projectileSpawnY = transformComp.position.y;
 
         // Cycle through our sounds
-        if(m_laserIndex == m_LaserExplosions.size())
+        if(m_laserIndex == static_cast<int>(m_LaserExplosions.size()))
         {
             m_laserIndex = 0;
         }
         Mix_Chunk* laser = m_LaserExplosions[m_laserIndex];
         ++m_laserIndex;
         
-        Entity projectileEntity = m_Coordinator.CreateEntity();
+        const Entity projectileEntity = m_Coordinator.CreateEntity();
         m_Coordinator.AddComponent<RigidBody>(projectileEntity, {(velocityDirection * PLAYER_PROJECTILE_SPEED) + playerRigidBodyComp.velocity ,  Vector2(0, 0)});
         m_Coordinator.AddComponent<Transform>(projectileEntity, {Vector2(projectileSpawnX, projectileSpawnY),  Vector2(1, 1), Vector2(0,0)});
         m_Coordinator.AddComponent<BasicShape>(projectileEntity, {projectile_verticies,  ColorWhite});
-        m_Coordinator.AddComponent<Gravity>(projectileEntity,{Vector2(0, 0)});
         m_Coordinator.AddComponent<Projectile>(projectileEntity,{});
         m_Coordinator.AddComponent<SFX>(projectileEntity,{nullptr, laser});
         AudioSystem::PlaySound(laser, -1);
     }
-    
 }
 
 void PlayerInputSystem::HandleRotation(Entity entity, ORIENTATION orientation)
@@ -117,10 +109,8 @@ void PlayerInputSystem::HandleRotation(Entity entity, ORIENTATION orientation)
     RotateShape(basicShapeComp.m_Vertices, theta);
 }
 
-
-
 void PlayerInputSystem::RotateShape(std::vector<SDL_FPoint>& vertices, float theta) {
-    const int polygonSides = vertices.size();
+    const int polygonSides = static_cast<int>(vertices.size());
     const std::vector<SDL_FPoint> previousVertices = vertices;
     
     // We need our center point to rotate around
@@ -222,7 +212,6 @@ void PlayerInputSystem::MouseButtonEvent(const SDL_MouseButtonEvent& event)
         Entity dotEntity = m_Coordinator.CreateEntity();
         m_Coordinator.AddComponent<Transform>(dotEntity, {Vector2(event.x, event.y),  Vector2(1, 1), Vector2(0,0)});
         m_Coordinator.AddComponent<BasicShape>(dotEntity, {point,  ColorWhite});
-        std:: cout << "Created Entity at "<< pos.x << "," << pos.y << std::endl;
         m_Coordinator.AddDrawnPoint(pos);
     }
 }
@@ -239,8 +228,6 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
     for(auto& entity :m_Entities)
     {
         auto& rigidBodyComp = m_Coordinator.GetComponent<RigidBody>(entity);
-        auto& transformComp = m_Coordinator.GetComponent<Transform>(entity);
-
         switch(event.type)
         {
             case SDL_KEYDOWN:

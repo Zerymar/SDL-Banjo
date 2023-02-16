@@ -70,8 +70,8 @@ void AsteroidSystem::CreateOutline(std::vector<SDL_FPoint>& asteroidVertices)
     // Generate out Asteroid 
     for(int j = 0; j <= ASTEROID_VERTICES; ++j)
     {
-        int randX = width_distr(gen);
-        int randY = height_distr(gen);
+        float randX = width_distr(gen);
+        float randY = height_distr(gen);
         SDL_FPoint randPoint;
         randPoint.x =randX + MIN_ASTEROID_WIDTH;
         randPoint.y =randY + MIN_ASTEROID_HEIGHT;
@@ -95,7 +95,6 @@ void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 aste
     //Choose random explosion
     Mix_Chunk* explosion = Util::Random_Element(m_asteroidExplosions);
     Entity asteroidEntity = m_Coordinator.CreateEntity();
-    m_Coordinator.AddComponent<Gravity>(asteroidEntity,{Vector2(0, 0)});
     m_Coordinator.AddComponent<RigidBody>(asteroidEntity, {asteroidVelocity,  Vector2(0, 0)});
     m_Coordinator.AddComponent<Transform>(asteroidEntity, {asteroidPosition,  Vector2(1, 1), Vector2(0,0)});
     m_Coordinator.AddComponent<BasicShape>(asteroidEntity, {asteroidVertices,  m_Color});

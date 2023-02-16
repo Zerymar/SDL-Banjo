@@ -22,6 +22,24 @@ Vector2 Vector2::operator+(Vector2 const& vector) const
             y + vector.y);
 }
 
+bool Vector2::operator<(Vector2 const& vector) const
+{
+    return x < vector.x & y < vector.y;
+}
+bool Vector2::operator<=(Vector2 const& vector) const
+{
+    return x <= vector.x & y <= vector.y;
+}
+
+bool Vector2::operator>(Vector2 const& vector) const
+{
+    return x > vector.x & y > vector.y;
+}
+
+bool Vector2::operator>=(Vector2 const& vector) const
+{
+    return x >= vector.x & y >= vector.y;
+}
 
 
 Vector2 Vector2::operator+=(Vector2 const& vector)
@@ -30,6 +48,15 @@ Vector2 Vector2::operator+=(Vector2 const& vector)
     y += vector.y;
 
     return *this;
+}
+
+Vector2 Vector2::operator+=(float const& scalar)
+{
+    return Vector2(x + scalar,y + scalar);
+}
+Vector2 Vector2::operator-=(float const& scalar)
+{
+    return Vector2(x - scalar,y - scalar);
 }
 
 Vector2 Vector2::operator-(Vector2 const& vector) const

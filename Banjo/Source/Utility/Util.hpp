@@ -5,7 +5,7 @@
 #include "defs.h"
 #include "../Components/Transform.hpp"
 
-static class Util
+class Util
 {
 public:
     template <typename I>

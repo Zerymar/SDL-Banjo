@@ -98,7 +98,6 @@ bool Game::init()
     
     // initialize our components systems
     m_Coordinator.init();
-    m_Coordinator.RegisterComponent<Gravity>();
     m_Coordinator.RegisterComponent<Transform>();
     m_Coordinator.RegisterComponent<RigidBody>();
     m_Coordinator.RegisterComponent<BasicShape>();
@@ -111,7 +110,6 @@ bool Game::init()
     m_PhysicsSystem = m_Coordinator.RegisterSystem<class PhysicsSystem>();
     {
         Signature signature;
-        signature.set(m_Coordinator.GetComponentType<Gravity>());
         signature.set(m_Coordinator.GetComponentType<RigidBody>());
         signature.set(m_Coordinator.GetComponentType<Transform>());
         signature.set(m_Coordinator.GetComponentType<BasicShape>());
@@ -210,7 +208,6 @@ void Game::PlayerInit()
     
     Entity playerEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Player>(playerEntity, {player_vertices[2]});
-    m_Coordinator.AddComponent<Gravity>(playerEntity,{Vector2(0.f, 0.f)});
     m_Coordinator.AddComponent<RigidBody>(playerEntity, {Vector2(0.f, 0.f),  Vector2(0.f, 0.f), Vector2(0.f, 0.f)});
     m_Coordinator.AddComponent<Transform>(playerEntity, {Vector2(MIDDLE_X, MIDDLE_Y),  Vector2(1.0f, 1.0f), Vector2(0.f,0.f)});
     m_Coordinator.AddComponent<BasicShape>(playerEntity, {player_vertices,  Color});
@@ -309,7 +306,6 @@ void Game::run()
             m_CollisionSystem->Update();
             m_AudioSystem->Update();
             m_ScoreSystem->Update();
-            std::cout << m_ScoreSystem->GetScore() << std::endl;
             m_Coordinator.DestroyEntitiesInQueue();
             SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(m_pRenderer);

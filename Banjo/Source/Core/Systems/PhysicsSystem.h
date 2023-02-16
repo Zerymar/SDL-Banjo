@@ -11,5 +11,4 @@ public:
     void Init();
     void Update(float deltaTime);
     void OnEntityDelete(Entity entity) override;
-    std::vector<Entity> m_EntitiesToDelete;
 };

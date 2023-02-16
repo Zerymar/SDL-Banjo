@@ -33,7 +33,7 @@ void RenderSystem::RenderEntities(SDL_Renderer* renderer)
         SDL_SetRenderDrawColor(renderer, (Uint8) Color.x, (Uint8) Color.y, (Uint8) Color.z, 255);
         if(basicShapeComponent.m_Vertices.size() == 1)
         {
-            SDL_RenderDrawPoint(renderer, vertices[0].x, vertices[0].y);
+            SDL_RenderDrawPointF(renderer, vertices[0].x, vertices[0].y);
         }
         else if(basicShapeComponent.m_Vertices.size() > 1)
         {
@@ -42,7 +42,7 @@ void RenderSystem::RenderEntities(SDL_Renderer* renderer)
             SDL_FPoint firstVertex = vertices[0];
             vertices.push_back(firstVertex);
             SetOffset(vertices, transformComponent);
-            const int polygonSides = vertices.size();
+            const int polygonSides = static_cast<int>(vertices.size());
             SDL_RenderDrawLinesF(renderer, vertices.data(), polygonSides);
         }
     }
@@ -52,7 +52,8 @@ void RenderSystem::RenderEntities(SDL_Renderer* renderer)
 void RenderSystem::RenderPoints(SDL_Renderer* renderer, const std::vector<SDL_FPoint> points, const Vector3 Color)
 {
     if(points.empty()) return;
-    SDL_SetRenderDrawColor(renderer, Color.x, Color.y, Color.z, 255);
+    SDL_SetRenderDrawColor(renderer, static_cast<Uint8>(Color.x), static_cast<Uint8>(Color.y),
+        static_cast<Uint8>(Color.z), 255);
     for(auto point : points)
     {
         SDL_RenderDrawPointF(renderer, point.x, point.y);
@@ -62,12 +63,13 @@ void RenderSystem::RenderPoints(SDL_Renderer* renderer, const std::vector<SDL_FP
 void RenderSystem::RenderLines(SDL_Renderer* renderer, std::vector<SDL_FPoint> points, const Vector3 Color)
 {
     if(points.empty() || points.size() <= 1) return;
-    SDL_SetRenderDrawColor(renderer, Color.x, Color.y, Color.z, 255);
+    SDL_SetRenderDrawColor(renderer, static_cast<Uint8>(Color.x), static_cast<Uint8>(Color.y),
+        static_cast<Uint8>(Color.z), 255);
     // add our first point again at the end
     const SDL_FPoint originPoint = points[0];
     points.push_back(originPoint);
     
-    SDL_RenderDrawLinesF(renderer, points.data(), points.size());
+    SDL_RenderDrawLinesF(renderer, points.data(), static_cast<int>(points.size()));
 }
 
 void RenderSystem::OnEntityDelete(Entity entity)

@@ -407,7 +407,6 @@
       <Content Include="Source\Resources\Media\Audio\SFX\Asteroid\explosion09.wav" />
       <Content Include="Source\Resources\Media\Audio\SFX\Laser\laser01.wav" />
       <Content Include="Source\Resources\Media\Audio\SFX\Laser\laser02.wav" />
-      <Content Include="Source\Resources\Media\Audio\SFX\Laser\laser03.wav" />
       <Content Include="Source\Resources\Media\Audio\SFX\Player\p_explosion01.wav" />
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
