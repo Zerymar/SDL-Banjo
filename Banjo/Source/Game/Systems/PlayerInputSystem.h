@@ -30,4 +30,6 @@ private:
     Vector2 GetPlayerPointDirection(const Entity& entity);
     std::vector<Mix_Chunk*> m_LaserExplosions;
     int m_laserIndex = 0;
+
+    bool m_FireProjectile = false;
 };

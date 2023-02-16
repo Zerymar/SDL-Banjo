@@ -11,6 +11,16 @@ void ScoreSystem::Init()
 
 void ScoreSystem::Update()
 {
+    for(auto& entity: m_Entities)
+    {
+        std::set<Entity> entitiesQueued;
+        m_Coordinator.GetQueuedEntitiesToDelete(entitiesQueued);
+        if(entitiesQueued.find(entity) != entitiesQueued.end())
+        {
+            auto& scorePointsComp = m_Coordinator.GetComponent<ScorePoints>(entity);
+            m_Score += scorePointsComp.points;
+        }
+    }
 }
 
 void ScoreSystem::OnEntityDelete(Entity entity)

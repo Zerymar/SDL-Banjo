@@ -36,8 +36,10 @@ void CollisionSystem::HandleCollision(const Entity& entity, const BasicShape& a_
 
             if(PointInPolygon(a_TrueVertices, b_TrueVertices) && bIsComponentT)
             {
-                m_EntitiesToDelete.push_back(entity);
-                m_EntitiesToDelete.push_back(otherEntity);
+                m_Coordinator.QueueEntityToDelete(entity);
+                m_Coordinator.QueueEntityToDelete(otherEntity);
+                m_EntitiesToDelete.insert(entity);
+                m_EntitiesToDelete.insert(otherEntity);
             }
         }
     }
@@ -76,18 +78,13 @@ void CollisionSystem::Update()
         {
             auto& sfxComponent = m_Coordinator.GetComponent<SFX>(entity);
             auto& transformComponent = m_Coordinator.GetComponent<Transform>(entity);
+
+        //Only want to play sound if our asteroid is destroyed "on screen" aka by a projectile or ran into the player
             if(!Util::IsOutOfBounds(transformComponent))
             {
                 AudioSystem::PlaySound(sfxComponent.DestroySFX, 0);
-                bool bIsAsteroid = m_Coordinator.ContainsEntity<Asteroid>(entity);
-                if(bIsAsteroid)
-                {
-                    //ScoreSystem::IncrementScore(100);
-                    //std::cout << "Current score: " << ScoreSystem::GetScore();
-                }
             }
         }
-        m_Coordinator.DestroyEntity(entity);
     }
     m_EntitiesToDelete.clear();
 }
@@ -107,7 +104,7 @@ void CollisionSystem::OnEntityDelete(Entity entity)
 }
 
 // checks if any point of our polygon intersects
-// is O(N^2) worst since we're checking every point
+// While not the most efficient, our data set is so minimal
 bool CollisionSystem::PointInPolygon(std::vector<SDL_FPoint> points, std::vector<SDL_FPoint> polygon) {
 
     // number of vertices in polygon

@@ -49,6 +49,27 @@ public:
         }
         destroyedEntities.clear();
     }
+
+    void QueueEntityToDelete(Entity entity)
+    {
+        m_EntitiesToDelete.insert(entity);
+    }
+    
+    void DestroyEntitiesInQueue()
+    {
+        for(auto& entity : m_EntitiesToDelete)
+        {
+            DestroyEntity(entity);
+        }
+        m_EntitiesToDelete.clear();
+        
+    }
+
+    void GetQueuedEntitiesToDelete(std::set<Entity>& entities)
+    {
+        entities = m_EntitiesToDelete;
+    }
+    
     
 //Component Methods
     template<typename T>
@@ -139,6 +160,8 @@ public:
     {
         m_bRestartGame = !m_bRestartGame;
     }
+
+
     
 
 
@@ -150,5 +173,6 @@ protected:
     std::vector<SDL_FPoint> m_DrawnPoints;
     bool m_bIsPaused = false;
     bool m_bRestartGame = false;
+    std::set<Entity> m_EntitiesToDelete;
     
 };

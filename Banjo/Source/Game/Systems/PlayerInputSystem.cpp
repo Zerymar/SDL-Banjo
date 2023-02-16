@@ -38,7 +38,11 @@ void PlayerInputSystem::Update()
         {
             rigidBodyComp.velocity = GetPlayerPointDirection(entity) * PLAYER_SPEED;
         }
+
     }
+
+
+    
 }
 
 
@@ -146,6 +150,7 @@ void PlayerInputSystem::RotateShape(std::vector<SDL_FPoint>& vertices, float the
     {
         float x = (vertices[i].x * cos(theta)) - (vertices[i].y * sin(theta));
         float y = (vertices[i].x * sin(theta)) + (vertices[i].y * cos(theta));
+        
         vertices[i].x = x;
         vertices[i].y = y;
     }
@@ -191,8 +196,8 @@ void PlayerInputSystem::ScaleRotatedPoints(const std::vector<SDL_FPoint>& prevVe
     int scaleIndex = 0;
     for(auto& point : currentVertices)
     {
-        double xoffSet = (point.x - centerPoint.x) * vertexScale[scaleIndex];
-        double yoffSet = ((point.y - centerPoint.y) * vertexScale[scaleIndex]);
+        float xoffSet = (point.x - centerPoint.x) * vertexScale[scaleIndex];
+        float yoffSet = ((point.y - centerPoint.y) * vertexScale[scaleIndex]);
         point.x = centerPoint.x + xoffSet;
         point.y = centerPoint.y + yoffSet;
         ++scaleIndex;
@@ -243,11 +248,11 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                 {
                     case SDLK_a:
                         m_Orientation = CounterClockwise;
-                        rigidBodyComp.rotationSpeed = {1,1};
+                        rigidBodyComp.rotationSpeed = {0.5f,0.5f};
                         break;
                     case SDLK_d:
                         m_Orientation = Clockwise;
-                         rigidBodyComp.rotationSpeed = {1,1};
+                         rigidBodyComp.rotationSpeed = {0.5f,0.5f};
                          break;
                     case SDLK_w:
                         m_bIsAccelerating = true;
@@ -256,12 +261,9 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                         break;
                     case SDLK_p:
                         break;
-                    case SDLK_SPACE:
-                        CreatePlayerProjectile();
-                            break;
+                        // only allow fire once
                     case SDLK_q:
                         //m_Coordinator.GenerateConvexHull();
-                        
                         break;
                 }
                 break;
@@ -286,7 +288,11 @@ void PlayerInputSystem::HandleInput(const SDL_Event& event)
                     case SDLK_p:
                         m_Coordinator.TogglePause();
                         break;
-                    break;
+                    case SDLK_SPACE:
+                        CreatePlayerProjectile();
+                        break;
+                    default:
+                        break;
                 }
                 break;
             case SDL_MOUSEBUTTONDOWN:

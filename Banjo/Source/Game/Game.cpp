@@ -308,11 +308,14 @@ void Game::run()
             m_AsteroidSystem->Update();
             m_CollisionSystem->Update();
             m_AudioSystem->Update();
+            m_ScoreSystem->Update();
+            std::cout << m_ScoreSystem->GetScore() << std::endl;
+            m_Coordinator.DestroyEntitiesInQueue();
             SDL_SetRenderDrawColor(m_pRenderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
             SDL_RenderClear(m_pRenderer);
             m_RenderSystem->RenderEntities(m_pRenderer);
             SDL_RenderPresent(m_pRenderer);
         }
-        SDL_Delay(15);
+        SDL_Delay(30);
     }
 }

@@ -88,11 +88,11 @@ void AsteroidSystem::GenerateVelocity(Vector2& asteroidVelocity, const Vector2& 
     int yVelocity = SCREEN_HEIGHT/2 - asteroidPosition.y > 0 ? 1 : -1;
     asteroidVelocity.x = xVelocity ;
     asteroidVelocity.y = yVelocity;
-
 }
 
 void AsteroidSystem::CreateAsteroidEntity(Vector2 asteroidPosition, Vector2 asteroidVelocity, std::vector<SDL_FPoint> asteroidVertices)
 {
+    //Choose random explosion
     Mix_Chunk* explosion = Util::Random_Element(m_asteroidExplosions);
     Entity asteroidEntity = m_Coordinator.CreateEntity();
     m_Coordinator.AddComponent<Gravity>(asteroidEntity,{Vector2(0, 0)});

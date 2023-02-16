@@ -19,6 +19,6 @@ class CollisionSystem : public System
    void HandleCollision(const Entity& entity, const BasicShape& a_basicShapeComponent,
        const Transform& a_transformComponent);
  
- std::vector<Entity> m_EntitiesToDelete;
+    std::set<Entity> m_EntitiesToDelete;
     
 };
