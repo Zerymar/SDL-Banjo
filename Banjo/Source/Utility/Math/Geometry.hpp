@@ -17,7 +17,7 @@ class Geometry
     static SDL_FPoint point0;
 public:
     
-    
+    // Taken from: https://www.geeksforgeeks.org/convex-hull-using-graham-scan/
     // Utility function to find next to top in Stack
     static SDL_FPoint NextToTop(std::stack<SDL_FPoint> &stack)
     {
